@@ -1,0 +1,15 @@
+﻿@model BookListingModel
+
+@{ ViewData["Title"] = "Delete Book"; }
+
+<h2>@ViewData["Title"]</h2>
+
+<h2>Are you sure you want to delete @Model.Title?</h2>
+
+<div class="btn-group">
+	<a asp-controller="Books" asp-action="All" 
+	   class="btn btn-default">Back</a>
+
+	<a asp-controller="Books" asp-action="ConfirmDelete"
+	   asp-route-id=@Model.Id class="btn btn-danger">Delete Book</a>
+</div>

@@ -1,0 +1,11 @@
+﻿@model BookDetailsModel
+
+@{ ViewData["Title"] = "Add Book"; }
+
+<h2>@ViewData["Title"]</h2>
+
+@await Html.PartialAsync("_BookForm", Model)
+
+@section Scripts {
+	@await Html.PartialAsync("_ValidationScriptsPartial")
+}

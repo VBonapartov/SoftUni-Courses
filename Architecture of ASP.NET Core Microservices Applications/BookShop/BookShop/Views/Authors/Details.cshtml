@@ -1,0 +1,36 @@
+﻿@model AuthorDetailsModel
+
+@{ ViewData["Title"] = "Details"; }
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+	<h4>Author: @($"{Model.FirstName} {Model.LastName}")</h4>
+</p>
+<h4>Books:</h4>
+@{
+	var counter = 1;
+}
+<table class="table">
+	<tr>
+		<th>
+			<h5>N</h5>
+		</th>
+		<th>
+			<h5>Title</h5>
+		</th>
+	</tr>
+	@foreach (var book in Model.Books)
+	{
+	<tr>
+		<th>
+			<h5>@(counter++)</h5>
+		</th>
+		<th>
+			<h5>@book</h5>
+		</th>
+	</tr>
+	}
+</table>
+<a asp-controller="Authors" asp-action="All"
+   class="btn btn-secondary">Back</a>

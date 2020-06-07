@@ -1,0 +1,15 @@
+﻿@model CategoryModel
+
+@{ ViewData["Title"] = "Delete Category"; }
+
+<h2>@ViewData["Title"]</h2>
+
+<h2>Are you sure you want to delete @Model.Name?</h2>
+
+<div class="btn-group">
+	<a asp-controller="Categories" asp-action="All" 
+	   class="btn btn-default">Back</a>
+
+	<a asp-controller="Categories" asp-action="ConfirmDelete"
+	   asp-route-id=@Model.Id class="btn btn-danger">Delete Category</a>
+</div>

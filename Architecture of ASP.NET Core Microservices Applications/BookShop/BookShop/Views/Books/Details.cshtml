@@ -1,0 +1,17 @@
+﻿@model BookDetailsModel
+
+@{ ViewData["Title"] = "Book Details"; }
+
+<h2>@ViewData["Title"]</h2>
+
+<h4>Title: @Model.Title</h4>
+<h4>Author: @Model.Author</h4>
+<h4>Copies: @Model.Copies</h4>
+<h4>Edition: @Model.Edition</h4>
+<h4>Release Date: @Model.ReleaseDate</h4>
+<h4>Categories: @(string.Join("; ", Model.Categories))</h4>
+<h4>Price: @Model.Price</h4>
+<h4>Description: @Model.Description</h4>
+
+<a asp-controller="Books" asp-action="All"
+   class="btn btn-secondary">Back</a>
