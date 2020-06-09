@@ -1,44 +1,48 @@
-﻿@model IEnumerable<AuthorDetailsModel>
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<AuthorDetailsModel>
+@inject SignInManager<IdentityUser> SignInManager
 
 @{ ViewData["Title"] = "Authors"; }
 
 <h2>@ViewData["Title"]</h2>
 
-<p>
-	<a asp-controller="Authors" asp-action="Add" class="btn btn-secondary">Add New Author</a>
-</p>
+@if (SignInManager.IsSignedIn(User))
+{
+    <p>
+        <a asp-controller="Authors" asp-action="Add" class="btn btn-secondary">Add New Author</a>
+    </p>
+}
 
 <table class="table">
-	<tr>
-		<th>
-			<h5>Id</h5>
-		</th>
-		<th>
-			<h5>First Name</h5>
-		</th>
-		<th>
-			<h5>Last Name</h5>
-		</th>
-		<th>
-			<h5>Action</h5>
-		</th>
-	</tr>
-	@foreach (var author in Model)
-	{
-	<tr>
-		<th>
-			<h5>@author.Id</h5>
-		</th>
-		<th>
-			<h5>@author.FirstName</h5>
-		</th>
-		<th>
-			<h5>@author.LastName</h5>
-		</th>
-		<th>
-			<a asp-controller="Authors" asp-action="Details"
-			   asp-route-id=@author.Id class="btn btn-primary">Details</a>
-		</th>
-	</tr>
-	}
+    <tr>
+        <th>
+            <h5>Id</h5>
+        </th>
+        <th>
+            <h5>First Name</h5>
+        </th>
+        <th>
+            <h5>Last Name</h5>
+        </th>
+        <th>
+            <h5>Action</h5>
+        </th>
+    </tr>
+    @foreach (var author in Model)
+    {
+<tr>
+    <th>
+        <h5>@author.Id</h5>
+    </th>
+    <th>
+        <h5>@author.FirstName</h5>
+    </th>
+    <th>
+        <h5>@author.LastName</h5>
+    </th>
+    <th>
+        <a asp-controller="Authors" asp-action="Details"
+           asp-route-id=@author.Id class="btn btn-primary">Details</a>
+    </th>
+</tr>}
 </table>

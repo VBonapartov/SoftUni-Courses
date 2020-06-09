@@ -29,6 +29,7 @@
             var categories = await this._db
                 .Categories
                 .ProjectTo<CategoryModel>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
                 .ToListAsync();
 
             if (categories == null)
@@ -97,6 +98,7 @@
                              .Categories
                              .Where(c => c.Id == id)
                              .ProjectTo<CategoryModel>(_mapper.ConfigurationProvider)
+                             .AsNoTracking()
                              .FirstOrDefaultAsync();
 
             if (category == null)
@@ -127,6 +129,7 @@
 
             var categoryNameExists = await this._db
                         .Categories
+                        .AsNoTracking()
                         .Where(c => c.Id != id)
                         .AnyAsync(c => c.Name.ToLower() == model.Name.ToLower());
             
@@ -153,6 +156,7 @@
                 .Categories
                 .Where(c => c.Id == id)
                 .ProjectTo<CategoryModel>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
 
             if (category == null)

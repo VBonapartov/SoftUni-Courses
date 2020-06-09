@@ -1,0 +1,15 @@
+﻿@model ReviewListingModel
+
+@{ ViewData["Title"] = "Delete Review"; }
+
+<h2>@ViewData["Title"]</h2>
+
+<h2>Are you sure you want to delete review: @Model.BookName -> @Model.Title?</h2>
+
+<div class="btn-group">
+	<a asp-controller="Reviews" asp-action="All" 
+	   class="btn btn-default">Back</a>
+
+	<a asp-controller="Reviews" asp-action="ConfirmDelete"
+	   asp-route-id=@Model.Id class="btn btn-danger">Delete Review</a>
+</div>

@@ -34,6 +34,8 @@
 
         public Author Author { get; set; }
 
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
+
         public ICollection<CategoryBook> Categories { get; set; } = new List<CategoryBook>();
     }
 }

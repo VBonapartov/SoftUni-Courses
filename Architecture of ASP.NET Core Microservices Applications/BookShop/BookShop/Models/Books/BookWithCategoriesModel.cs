@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
-    using AutoMapper;
 
     public class BookWithCategoriesModel
     {
@@ -13,6 +12,7 @@
         [Required]
         public string Title { get; set; }
 
+        [Required]
         public string Description { get; set; }
 
         [Required]
@@ -33,10 +33,5 @@
         public IEnumerable<int> CategoriesId { get; set; }
 
         public IEnumerable<string> Categories { get; set; }
-
-        public virtual void ConfigureMapping(Profile mapper)
-        {
-        
-        }
     }
 }

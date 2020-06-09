@@ -31,6 +31,7 @@
             var books = await this._db
                 .Books
                 .ProjectTo<BookListingModel>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
                 .ToListAsync();
 
             if (books == null)
@@ -49,6 +50,7 @@
                      .Books
                      .Where(b => b.Id == id)
                      .ProjectTo<BookDetailsModel>(_mapper.ConfigurationProvider)
+                     .AsNoTracking()
                      .FirstOrDefaultAsync();
 
             if (bookDetails == null)
@@ -87,6 +89,7 @@
                     Value = $"{a.Id}",
                     Text = $"{a.FirstName} {a.LastName}"
                 })
+                .AsNoTracking()
                 .ToListAsync();
 
             var categories = await this._db.Categories
@@ -95,6 +98,7 @@
                     Value = $"{c.Id}",
                     Text = $"{c.Name}"
                 })
+                .AsNoTracking()
                 .ToListAsync();
 
             var booksModel = new BookDetailsModel
@@ -140,6 +144,7 @@
             var selectedCategories = await this._db
                 .Categories
                 .Where(c => model.CategoriesId.Contains(c.Id))
+                .AsNoTracking()
                 .ToListAsync();
 
             // Add Categories to Book
@@ -162,6 +167,7 @@
                              .Books
                              .Where(b => b.Id == id)
                              .ProjectTo<BookDetailsModel>(_mapper.ConfigurationProvider)
+                             .AsNoTracking()
                              .FirstOrDefaultAsync();
 
             if (book == null)
@@ -175,6 +181,7 @@
                                 Value = $"{a.Id}",
                                 Text = $"{a.FirstName} {a.LastName}"
                             })
+                            .AsNoTracking()
                             .ToListAsync();
 
             var categories = await this._db.Categories
@@ -183,6 +190,7 @@
                                 Value = $"{c.Id}",
                                 Text = $"{c.Name}"
                             })
+                            .AsNoTracking()
                             .ToListAsync();
 
             book.Authors = authors;
@@ -259,6 +267,7 @@
                 .Books
                 .Where(c => c.Id == id)
                 .ProjectTo<BookListingModel>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
                 .FirstOrDefaultAsync();
 
             if (book == null)

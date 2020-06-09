@@ -20,6 +20,8 @@
 
         public DbSet<CategoryBook> CategoryBooks { get; set; }
 
+        public DbSet<Review> Reviews { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

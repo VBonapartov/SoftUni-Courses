@@ -30,6 +30,7 @@
             var authors = await this._db
                 .Authors
                 .ProjectTo<AuthorDetailsModel>(_mapper.ConfigurationProvider)
+                .AsNoTracking()
                 .ToListAsync();
 
             if (authors == null)
@@ -47,6 +48,7 @@
                         .Authors
                         .Where(a => a.Id == id)
                         .ProjectTo<AuthorDetailsModel>(_mapper.ConfigurationProvider)
+                        .AsNoTracking()
                         .FirstOrDefaultAsync();
 
             if (authorDetails == null)
@@ -65,6 +67,7 @@
                             .Books
                             .Where(b => b.AuthorId == id)
                             .ProjectTo<BookWithCategoriesModel>(_mapper.ConfigurationProvider)
+                            .AsNoTracking()
                             .ToListAsync();
 
             if (authorBooks == null)

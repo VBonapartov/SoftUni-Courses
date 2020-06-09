@@ -21,7 +21,7 @@
 
         public List<SelectListItem> CategoryList { get; set; }
 
-        public override void ConfigureMapping(Profile mapper)
+        public void ConfigureMapping(Profile mapper)
         {
             mapper
                 .CreateMap<Book, BookDetailsModel>()
