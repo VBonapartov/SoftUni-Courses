@@ -1,9 +1,9 @@
 ﻿namespace BookShop.Models.Books
 {
-    using BookShop.Data.Models;
     using BookShop.Infrastructure.Mapping;
+    using BookShop.Services.Models.Books;
 
-    public class BookListingModel : IMapFrom<Book>
+    public class BookListingModel : IMapFrom<BookListingServiceModel>
     {
         public int Id { get; set; }
 

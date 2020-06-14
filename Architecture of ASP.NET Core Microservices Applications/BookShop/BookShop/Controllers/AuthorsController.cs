@@ -1,82 +1,73 @@
 ﻿namespace BookShop.Controllers
 {
-    using System.Linq;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using AutoMapper;
-    using AutoMapper.QueryableExtensions;
-    using BookShop.Data;
-    using BookShop.Data.Models;
     using BookShop.Models.Authors;
-    using BookShop.Models.Books;
+    using BookShop.Services.Authors;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
 
     public class AuthorsController : Controller
     {
-        private readonly BookShopDbContext _db;
+        private readonly IAuthorService authorService;
 
-        private readonly IMapper _mapper;
+        private readonly IMapper mapper;
 
-        public AuthorsController(BookShopDbContext db,  IMapper mapper)
+        public AuthorsController(IAuthorService authorService,  IMapper mapper)
         {
-            this._db = db;
-            this._mapper = mapper;
+            this.authorService = authorService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> All()
         {
-            var authors = await this._db
-                .Authors
-                .ProjectTo<AuthorDetailsModel>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .ToListAsync();
+            var authors = await this.authorService.All();
 
             if (authors == null)
             {
                 return NotFound();
             }
 
-            return View(authors);
+            var authorsModel = mapper.Map<IEnumerable<AuthorDetailsModel>>(authors);
+
+            return View(authorsModel);
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var authorDetails = await this._db
-                        .Authors
-                        .Where(a => a.Id == id)
-                        .ProjectTo<AuthorDetailsModel>(_mapper.ConfigurationProvider)
-                        .AsNoTracking()
-                        .FirstOrDefaultAsync();
+            var author = await this.authorService.Details(id);
 
-            if (authorDetails == null)
+            if (author == null)
             {
                 return RedirectToAction(nameof(All));
             }
 
-            return View(authorDetails);
+            var authorModel = mapper.Map<AuthorDetailsModel>(author);
+
+            return View(authorModel);
         }
 
-        [HttpGet]
-        [Route("{id}/books")]
-        public async Task<IActionResult> GetBooks(int id)
-        {
-            var authorBooks = await this._db
-                            .Books
-                            .Where(b => b.AuthorId == id)
-                            .ProjectTo<BookWithCategoriesModel>(_mapper.ConfigurationProvider)
-                            .AsNoTracking()
-                            .ToListAsync();
+        //[HttpGet]
+        //[Route("{id}/books")]
+        //public async Task<IActionResult> GetBooks(int id)
+        //{
+        //    var authorBooks = await this._db
+        //                    .Books
+        //                    .Where(b => b.AuthorId == id)
+        //                    .ProjectTo<BookWithCategoriesModel>(_mapper.ConfigurationProvider)
+        //                    .AsNoTracking()
+        //                    .ToListAsync();
 
-            if (authorBooks == null)
-            {
-                return NotFound();
-            }
+        //    if (authorBooks == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(authorBooks);
-        }
+        //    return View(authorBooks);
+        //}
 
         [HttpGet]
         [Authorize]
@@ -91,14 +82,7 @@
                 return RedirectToAction(nameof(Add));
             }
 
-            var author = new Author
-            {
-                FirstName = model.FirstName.Trim(),
-                LastName = model.LastName.Trim()
-            };
-
-            await this._db.Authors.AddAsync(author);
-            await this._db.SaveChangesAsync();
+            await this.authorService.Create(model.FirstName, model.LastName);
 
             return RedirectToAction(nameof(All));
         }

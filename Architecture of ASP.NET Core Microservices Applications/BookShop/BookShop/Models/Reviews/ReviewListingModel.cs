@@ -3,22 +3,29 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
+    using BookShop.Infrastructure.Mapping;
+    using BookShop.Services.Models.Reviews;
     using Microsoft.AspNetCore.Mvc.Rendering;
 
-    public class ReviewListingModel
+    using static Data.DataConstants.Review;
+
+    public class ReviewListingModel : IMapFrom<ReviewListingServiceModel>
     {        
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(30)]
+        [MinLength(MinTitleLength)]
+        [MaxLength(MaxTitleLength)]
         public string Title { get; set; }
 
         [Required]
-        [MaxLength(2000)]
+        [MinLength(MinDescriptionLength)]
+        [MaxLength(MaxDescriptionLength)]
         public string Description { get; set; }
 
         [Required]
-        [MaxLength(50)]
+        [MinLength(MinAuthorLength)]
+        [MaxLength(MaxAuthorLength)]
         public string Author { get; set; }
 
         public string BookName { get; set; }

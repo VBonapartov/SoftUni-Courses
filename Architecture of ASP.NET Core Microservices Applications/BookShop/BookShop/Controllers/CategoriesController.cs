@@ -1,43 +1,38 @@
 ﻿namespace BookShop.Controllers
 {
-    using System.Linq;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using AutoMapper;
-    using AutoMapper.QueryableExtensions;
-    using BookShop.Data;
-    using BookShop.Data.Models;
     using BookShop.Models.Categories;
+    using BookShop.Services.Categories;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;   
-    using Microsoft.EntityFrameworkCore;    
+    using Microsoft.AspNetCore.Mvc;      
 
     public class CategoriesController : Controller
     {
-        private readonly BookShopDbContext _db;
+        private readonly ICategoryService categoryService;
 
-        private readonly IMapper _mapper;
+        private readonly IMapper mapper;
 
-        public CategoriesController(BookShopDbContext db, IMapper mapper)
+        public CategoriesController(ICategoryService categoryService, IMapper mapper)
         {
-            this._db = db;
-            this._mapper = mapper;
+            this.categoryService = categoryService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> All()
         {
-            var categories = await this._db
-                .Categories
-                .ProjectTo<CategoryModel>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .ToListAsync();
+            var categories = await this.categoryService.All();
 
             if (categories == null)
             {
                 return NotFound();
             }
 
-            return View(categories);
+            var categoriesModel = mapper.Map<IEnumerable<CategoryModel>>(categories);
+
+            return View(categoriesModel);
         }            
 
         //[HttpGet]
@@ -72,20 +67,14 @@
 
             model.Name = model.Name.Trim();
 
-            var categoryNameExists = await this._db
-                        .Categories
-                        .AnyAsync(c => c.Name.ToLower() == model.Name.ToLower());
-            
+            var categoryNameExists = await this.categoryService.Exists(model.Name);
             if (categoryNameExists)
             {
                 ModelState.AddModelError(nameof(CategoryModel.Name), "Category name already exists.");
                 return View(model);
             }
 
-            var category = new Category { Name = model.Name };
-
-            await this._db.Categories.AddAsync(category);
-            await this._db.SaveChangesAsync();
+            var id = await this.categoryService.Create(model.Name);
 
             return RedirectToAction(nameof(All));
         }
@@ -94,19 +83,16 @@
         [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
-            var category = await this._db
-                             .Categories
-                             .Where(c => c.Id == id)
-                             .ProjectTo<CategoryModel>(_mapper.ConfigurationProvider)
-                             .AsNoTracking()
-                             .FirstOrDefaultAsync();
+            var category = await this.categoryService.Details(id);
 
             if (category == null)
             {                
                 return RedirectToAction(nameof(All));
             }
 
-            return View(category);
+            var categoryModel = mapper.Map<CategoryModel>(category);
+
+            return View(categoryModel);
         }
 
         [HttpPost]
@@ -118,32 +104,22 @@
                 return RedirectToAction(nameof(Edit), id);
             }
 
-            var category = await this._db.Categories.FindAsync(id);
-            if (category == null)
+            var categoryExists = await this.categoryService.Exists(id);
+            if (!categoryExists)
             {
-                ModelState.AddModelError(nameof(CategoryModel.Name), "Category does not exist.");
-                return View(model);
+                return NotFound("Category does not exist.");
             }
 
             model.Name = model.Name.Trim();
 
-            var categoryNameExists = await this._db
-                        .Categories
-                        .AsNoTracking()
-                        .Where(c => c.Id != id)
-                        .AnyAsync(c => c.Name.ToLower() == model.Name.ToLower());
-            
+            var categoryNameExists = await this.categoryService.Exists(id, model.Name);
             if (categoryNameExists)
             {
                 ModelState.AddModelError(nameof(CategoryModel.Name), "Category name already exists.");
                 return View(model);
             }
 
-            if (category.Name != model.Name)
-            {
-                category.Name = model.Name;
-                await this._db.SaveChangesAsync();
-            }
+            await this.categoryService.Update(id, model.Name);
 
             return RedirectToAction(nameof(All));
         }
@@ -152,33 +128,29 @@
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
-            var category = await this._db
-                .Categories
-                .Where(c => c.Id == id)
-                .ProjectTo<CategoryModel>(_mapper.ConfigurationProvider)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
+            var category = await this.categoryService.Details(id);
 
             if (category == null)
             {                
                 return RedirectToAction(nameof(All));
             }
 
-            return View(category);
+            var categoryModel = mapper.Map<CategoryModel>(category);
+
+            return View(categoryModel);
         }
 
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> ConfirmDelete(int id)
         {
-            var category = await this._db.Categories.FindAsync(id);
-            if (category == null)
+            var categoryExists = await this.categoryService.Exists(id);
+            if (!categoryExists)
             {
                 return RedirectToAction(nameof(All));
             }
 
-            this._db.Remove(category);
-            await this._db.SaveChangesAsync();
+            await this.categoryService.Delete(id);
 
             return RedirectToAction(nameof(All));
         }

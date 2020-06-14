@@ -1,16 +1,18 @@
 ﻿namespace BookShop.Models.Categories
 {
     using System.ComponentModel.DataAnnotations;
-    using BookShop.Data.Models;
-    using BookShop.Infrastructure.Mapping;        
+    using BookShop.Infrastructure.Mapping;
+    using BookShop.Services.Models.Categories;
 
-    public class CategoryModel : IMapFrom<Category>
+    using static Data.DataConstants.Category;
+
+    public class CategoryModel : IMapFrom<CategoryServiceModel>
     {
         public int Id { get; set; }
 
         [Required]
-        [MinLength(3)]
-        [MaxLength(50)]
+        [MinLength(MinNameLength)]
+        [MaxLength(MaxNameLength)]
         public string Name { get; set; }
     }
 }

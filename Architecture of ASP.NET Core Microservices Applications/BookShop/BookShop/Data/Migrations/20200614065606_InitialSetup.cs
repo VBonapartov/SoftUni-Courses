@@ -186,12 +186,12 @@ namespace BookShop.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(maxLength: 100, nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    Price = table.Column<decimal>(nullable: false),
+                    Description = table.Column<string>(maxLength: 300, nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Copies = table.Column<int>(nullable: false),
                     Edition = table.Column<int>(nullable: true),
                     AgeRestriction = table.Column<int>(nullable: true),
-                    ReleaseDate = table.Column<DateTime>(nullable: false),
+                    ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AuthorId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -202,7 +202,7 @@ namespace BookShop.Data.Migrations
                         column: x => x.AuthorId,
                         principalTable: "Authors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -214,7 +214,7 @@ namespace BookShop.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CategoryBooks", x => new { x.CategoryId, x.BookId });
+                    table.PrimaryKey("PK_CategoryBooks", x => new { x.BookId, x.CategoryId });
                     table.ForeignKey(
                         name: "FK_CategoryBooks_Books_BookId",
                         column: x => x.BookId,
@@ -227,6 +227,28 @@ namespace BookShop.Data.Migrations
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reviews",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(maxLength: 30, nullable: false),
+                    Description = table.Column<string>(maxLength: 2000, nullable: false),
+                    Author = table.Column<string>(maxLength: 50, nullable: false),
+                    BookId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reviews", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -274,8 +296,13 @@ namespace BookShop.Data.Migrations
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CategoryBooks_BookId",
+                name: "IX_CategoryBooks_CategoryId",
                 table: "CategoryBooks",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_BookId",
+                table: "Reviews",
                 column: "BookId");
         }
 
@@ -300,16 +327,19 @@ namespace BookShop.Data.Migrations
                 name: "CategoryBooks");
 
             migrationBuilder.DropTable(
+                name: "Reviews");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Books");
 
             migrationBuilder.DropTable(
                 name: "Authors");

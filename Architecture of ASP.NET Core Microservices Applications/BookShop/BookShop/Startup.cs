@@ -9,7 +9,11 @@ namespace BookShop
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;   
+    using Microsoft.Extensions.Hosting;
+    using BookShop.Services.Authors;
+    using BookShop.Services.Categories;
+    using BookShop.Services.Reviews;
+    using BookShop.Services.Books;
 
     public class Startup
     {
@@ -46,6 +50,11 @@ namespace BookShop
             services.AddRazorPages();
 
             services.AddAutoMapper(typeof(Startup));
+
+            services.AddTransient<IAuthorService, AuthorService>();
+            services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IReviewService, ReviewService>();
+            services.AddTransient<IBookService, BookService>();
 
             services.AddRouting(options => options.LowercaseUrls = true);
         }

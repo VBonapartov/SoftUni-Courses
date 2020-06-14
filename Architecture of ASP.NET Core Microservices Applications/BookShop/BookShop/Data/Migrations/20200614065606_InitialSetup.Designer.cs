@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookShop.Data.Migrations
 {
     [DbContext(typeof(BookShopDbContext))]
-    [Migration("20200608172719_Add Book Review")]
-    partial class AddBookReview
+    [Migration("20200614065606_InitialSetup")]
+    partial class InitialSetup
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.4")
+                .HasAnnotation("ProductVersion", "3.1.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -61,7 +61,8 @@ namespace BookShop.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(300)")
+                        .HasMaxLength(300);
 
                     b.Property<int?>("Edition")
                         .HasColumnType("int");
@@ -104,15 +105,15 @@ namespace BookShop.Data.Migrations
 
             modelBuilder.Entity("BookShop.Data.Models.CategoryBook", b =>
                 {
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.HasKey("CategoryId", "BookId");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("BookId");
+                    b.HasKey("BookId", "CategoryId");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("CategoryBooks");
                 });
@@ -354,7 +355,7 @@ namespace BookShop.Data.Migrations
                     b.HasOne("BookShop.Data.Models.Author", "Author")
                         .WithMany("Books")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -378,7 +379,7 @@ namespace BookShop.Data.Migrations
                     b.HasOne("BookShop.Data.Models.Book", "Book")
                         .WithMany("Reviews")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 

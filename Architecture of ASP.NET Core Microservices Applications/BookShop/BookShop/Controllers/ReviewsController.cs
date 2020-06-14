@@ -1,92 +1,82 @@
 ﻿namespace BookShop.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
-    using BookShop.Data;
-    using BookShop.Data.Models;
     using BookShop.Models.Reviews;
+    using BookShop.Services.Books;
+    using BookShop.Services.Reviews;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
-    using Microsoft.EntityFrameworkCore;
 
     public class ReviewsController : Controller
     {
-        private readonly BookShopDbContext _db;
+        private readonly IBookService bookService;
 
-        private readonly IMapper _mapper;
+        private readonly IReviewService reviewService;
 
-        public ReviewsController(BookShopDbContext db,  IMapper mapper)
+        private readonly IMapper mapper;
+
+        public ReviewsController(IBookService bookService, IReviewService reviewService,  IMapper mapper)
         {
-            this._db = db;
-            this._mapper = mapper;
+            this.bookService = bookService;
+            this.reviewService = reviewService;
+            this.mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> All()
         {
-            var reviews = await this._db
-                    .Reviews
-                    .Select(r => new ReviewListingModel { 
-                        Id = r.Id,
-                        Title = r.Title,
-                        Description = r.Description.Substring(0, Math.Min(r.Description.Length, 300)) + ".....",
-                        Author = r.Author,
-                        BookName = r.Book.Title
-                    })      
-                    .AsNoTracking()
-                    .ToListAsync();
+            var reviews = await this.reviewService.All();
 
             if (reviews == null)
             {
                 return NotFound();
             }
 
-            return View(reviews);
+            var reviewsModel = mapper.Map<List<ReviewListingModel>>(reviews);
+            reviewsModel.ToList().ForEach(r =>
+            {
+                r.Description = r.Description.Substring(0, Math.Min(r.Description.Length, 300)) + ".....";
+            }); 
+
+            return View(reviewsModel);
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var review = await this._db
-                    .Reviews
-                    .Where(r => r.Id == id)
-                    .Select(r => new ReviewListingModel
-                    {
-                        Id = r.Id,
-                        Title = r.Title,
-                        Description = r.Description,
-                        Author = r.Author,
-                        BookName = r.Book.Title
-                    })
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync();
+            var review = await this.reviewService.Details(id);
 
             if (review == null)
             {
                 return NotFound();
             }
 
-            return View(review);
+            var reviewModel = mapper.Map<ReviewListingModel>(review);
+
+            return View(reviewModel);
         }
 
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Add()
         {
-            var books = await this._db.Books
+            var books = await this.bookService.All();
+            var bookList = books
                     .Select(b => new SelectListItem
                     {
                         Value = $"{b.Id}",
                         Text = $"{b.Title}"
                     })
-                    .ToListAsync();
+                    .ToList();
 
             var review = new ReviewListingModel
             {
-                Books = books
+                Books = bookList
             };
 
             return View(review);
@@ -101,16 +91,18 @@
                 return RedirectToAction(nameof(Add));
             }
 
-            var review = new Review
+            var bookExists = await this.bookService.Exists(model.BookId);
+            if (!bookExists)
             {
-                Title = model.Title,
-                Description = model.Description,
-                Author = model.Author,
-                BookId = model.BookId
-            };
+                ModelState.AddModelError(nameof(ReviewListingModel.BookId), "Book does not exist.");
+                return View(model);
+            }
 
-            await this._db.Reviews.AddAsync(review);
-            await this._db.SaveChangesAsync();
+            await this.reviewService
+                .Create(model.Title, 
+                        model.Description, 
+                        model.Author, 
+                        model.BookId);
 
             return RedirectToAction(nameof(All));
         }
@@ -119,37 +111,27 @@
         [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
-            var review = await this._db
-                             .Reviews
-                             .Where(c => c.Id == id)
-                             .Select(r => new ReviewListingModel
-                             {
-                                Id = r.Id,
-                                Title = r.Title,
-                                Description = r.Description,
-                                Author = r.Author,
-                                BookId = r.Book.Id,
-                                BookName = r.Book.Title
-                             })
-                             .AsNoTracking()
-                             .FirstOrDefaultAsync();
+            var review = await this.reviewService.Details(id);
 
             if (review == null)
             {
                 return RedirectToAction(nameof(All));
             }
 
-            var books = await this._db.Books
+            var reviewModel = mapper.Map<ReviewListingModel>(review);
+
+            var books = await this.bookService.All();
+            var bookList = books
                     .Select(b => new SelectListItem
                     {
                         Value = $"{b.Id}",
                         Text = $"{b.Title}"
                     })
-                    .ToListAsync();
+                    .ToList();
 
-            review.Books = books;
+            reviewModel.Books = bookList;
 
-            return View(review);
+            return View(reviewModel);
         }
 
         [HttpPost]
@@ -161,61 +143,57 @@
                 return RedirectToAction(nameof(Edit), id);
             }
 
-            var review = await this._db.Reviews.FindAsync(id);
-            if (review == null)
+            var reviewExists = await this.reviewService.Exists(id);
+            if (!reviewExists)
             {
-                return RedirectToAction(nameof(All), id);
+                ModelState.AddModelError(nameof(ReviewListingModel.Title), "Review does not exist.");
+                return View(model);
             }
 
-            review.Title = model.Title;
-            review.Description = model.Description;
-            review.Author = model.Author;
-            review.BookId = model.BookId;
+            var bookExists = await this.bookService.Exists(model.BookId);
+            if (!bookExists)
+            {
+                ModelState.AddModelError(nameof(ReviewListingModel.BookId), "Book does not exist.");
+                return View(model);
+            }
 
-            await this._db.SaveChangesAsync();
+            await this.reviewService.Update(
+                id,
+                model.Title.Trim(),
+                model.Description.Trim(),
+                model.Author.Trim(),
+                model.BookId);
 
             return RedirectToAction(nameof(All));
         }
-
 
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
-            var review = await this._db
-                .Reviews
-                .Where(c => c.Id == id)
-                .Select(r => new ReviewListingModel
-                {
-                    Id = r.Id,
-                    Title = r.Title,
-                    //Description = r.Description,
-                    //Author = r.Author,
-                    BookName = r.Book.Title
-                })
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
+            var review = await this.reviewService.Details(id);
 
             if (review == null)
             {
                 return RedirectToAction(nameof(All));
             }
 
-            return View(review);
+            var reviewModel = mapper.Map<ReviewListingModel>(review);
+
+            return View(reviewModel);
         }
 
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> ConfirmDelete(int id)
         {
-            var review = await this._db.Reviews.FindAsync(id);
-            if (review == null)
+            var reviewExists = await this.reviewService.Exists(id);
+            if (!reviewExists)
             {
                 return RedirectToAction(nameof(All));
-            }
+            }          
 
-            this._db.Remove(review);
-            await this._db.SaveChangesAsync();
+            await this.bookService.Delete(id);
 
             return RedirectToAction(nameof(All));
         }
