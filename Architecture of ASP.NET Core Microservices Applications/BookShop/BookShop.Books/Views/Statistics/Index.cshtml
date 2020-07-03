@@ -1,0 +1,24 @@
+﻿@model StatisticsOutputModel
+
+@{ ViewData["Title"] = "Statisticss"; }
+
+<div class="row">
+	<div class="col-lg-4">
+		<h2>Statistics</h2>
+	</div>
+</div>
+
+<table class="table table-striped table-bordered">
+	<thead>
+		<tr>
+			<th scope="col">Total Books</th>
+			<th scope="col">Total Reviews</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>@Model.TotalBooks</td>
+			<td>@Model.TotalReviews</td>
+		</tr>
+	</tbody>
+</table>
