@@ -8,18 +8,18 @@ namespace BookShop.Books
     using BookShop.Books.Services.Categories;    
     using BookShop.Books.Services.Books;    
     using BookShop.Books.Services.Reviews;
+    using BookShop.Books.Services.ReviewsGateway;
     using BookShop.Books.Services.Statistics;
     using BookShop.Books.Services.Users;
     using BookShop.Infrastructure;    
-    using BookShop.Services.Identity;
+    using BookShop.Services.Identity;    
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using Refit;
-    using BookShop.Books.Services.ReviewsGateway;
+    using Refit;    
 
     public class Startup
     {
@@ -86,11 +86,16 @@ namespace BookShop.Books
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
-            
+            app.UseCors(options => options
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+
+
             app.UseMiddleware<JwtCookieAuthenticationMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();

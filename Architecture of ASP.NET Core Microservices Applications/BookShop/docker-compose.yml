@@ -1,0 +1,143 @@
+version: "3.8"
+
+services:
+
+    data:
+        container_name: sqlserver
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        ports: 
+            - "1433:1433"
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=yourStrongPassword12!@
+        volumes: 
+            - sqldata:/var/opt/mssql 
+        networks: 
+            - bookshop-network
+            
+    messages:
+        container_name: rabbitmq
+        image: rabbitmq:3-management
+        ports:
+            - "15672:15672"
+            - "5672:5672"
+        hostname: "rabbitmq"
+        environment:
+            - RABBITMQ_ERLANG_COOKIE=Rand0mR4bbitMqCo0k1e
+            - RABBITMQ_DEFAULT_USER=rabbitmq
+            - RABBITMQ_DEFAULT_PASS=rabbitmq
+        networks: 
+            - bookshop-network            
+
+    identity:
+        container_name: identity
+        build:
+            context: ./
+            dockerfile: ./BookShop.Identity/Dockerfile
+        ports: 
+            - "5003:80"
+        env_file: BookShop/Common.env
+        environment:
+            - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=BookShopIdentityDb;User Id=sa; Password=yourStrongPassword12!@;MultipleActiveResultSets=true
+        restart: on-failure
+        volumes:
+            - ./.aspnet/identity/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+        networks: 
+            - bookshop-network
+        depends_on:
+            - data  
+           
+    books:
+        container_name: books
+        build:
+            context: ./
+            dockerfile: ./BookShop.Books/Dockerfile
+        ports: 
+            - "5001:80"
+        env_file: BookShop/Common.env
+        environment:
+            - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=BookShopBooksDb;User Id=sa; Password=yourStrongPassword12!@;MultipleActiveResultSets=true
+            - ServiceEndpoints__Identity=http://identity
+            - ServiceEndpoints__Reviews=http://reviews
+            - ServiceEndpoints__Statistics=http://statistics
+            - ServiceEndpoints__ReviewsGateway=http://reviewsgateway         
+        restart: on-failure
+        volumes:
+            - ./.aspnet/books/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+        networks: 
+            - bookshop-network
+        depends_on:
+            - data           
+            
+    reviews:
+        container_name: reviews
+        build:
+            context: ./
+            dockerfile: ./BookShop.Reviews/Dockerfile
+        ports: 
+            - "5005:80"
+        env_file: BookShop/Common.env
+        environment:
+            - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=BookShopReviewsDb;User Id=sa; Password=yourStrongPassword12!@;MultipleActiveResultSets=true
+        restart: on-failure
+        volumes:
+            - ./.aspnet/reviews/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+        networks: 
+            - bookshop-network
+        depends_on:
+            - data 
+            
+    reviewsgateway:
+        container_name: reviewsgateway
+        build:
+            context: ./
+            dockerfile: ./BookShop.Reviews.Gateway/Dockerfile
+        ports: 
+            - "5009:80"
+        env_file: BookShop/Common.env
+        environment:
+            - ServiceEndpoints__Statistics=http://statistics
+            - ServiceEndpoints__Reviews=http://reviews   
+        restart: on-failure
+        volumes:
+            - ./.aspnet/reviews/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+        networks: 
+            - bookshop-network           
+            
+    notifications:
+        container_name: notifications
+        build:
+            context: ./
+            dockerfile: ./BookShop.Notifications/Dockerfile
+        ports: 
+            - "5011:80"
+        env_file: BookShop/Common.env
+        restart: on-failure
+        volumes:
+            - ./.aspnet/reviews/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+        networks: 
+            - bookshop-network            
+            
+    statistics:
+        container_name: statistics
+        build:
+            context: ./
+            dockerfile: ./BookShop.Statistics/Dockerfile
+        ports: 
+            - "5007:80"
+        env_file: BookShop/Common.env
+        environment:
+            - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=BookShopStatisticsDb;User Id=sa; Password=yourStrongPassword12!@;MultipleActiveResultSets=true
+        restart: on-failure
+        volumes:
+            - ./.aspnet/statistics/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+        networks: 
+            - bookshop-network
+        depends_on:
+            - data
+
+networks:
+    bookshop-network:
+
+volumes:
+    sqldata:

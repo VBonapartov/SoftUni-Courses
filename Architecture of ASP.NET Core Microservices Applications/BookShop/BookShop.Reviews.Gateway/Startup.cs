@@ -51,12 +51,11 @@ namespace BookShop.Reviews.Gateway
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseJwtHeaderAuthentication();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

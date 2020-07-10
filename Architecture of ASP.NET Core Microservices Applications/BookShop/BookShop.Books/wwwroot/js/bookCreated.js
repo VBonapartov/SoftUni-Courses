@@ -1,6 +1,6 @@
-﻿"use strict";
+﻿//"use strict";
 
-// Ангулар
+// Angular
 //const options = {
 //    accessTokenFactory: () => {
 //        return localStorage.getItem('token');
@@ -9,7 +9,7 @@
 
 var connection = new signalR.HubConnectionBuilder()
     //.withUrl("https://localhost:5011/notifications", options)
-    .withUrl("https://localhost:5011/notifications")
+    .withUrl("http://localhost:5011/notifications")
     .build();
 
 connection

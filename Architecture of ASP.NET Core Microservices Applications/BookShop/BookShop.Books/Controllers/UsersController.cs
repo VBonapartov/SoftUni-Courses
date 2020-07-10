@@ -81,7 +81,7 @@
                         new CookieOptions
                         {
                             HttpOnly = true,
-                            Secure = true,
+                            //Secure = true,
                             MaxAge = TimeSpan.FromDays(1)
                         });
                 },

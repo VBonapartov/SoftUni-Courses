@@ -44,7 +44,7 @@ namespace BookShop.Notifications
                             builder =>
                             {
                                 builder
-                                    .WithOrigins("https://localhost:44338")
+                                    .WithOrigins("http://localhost:5001")
                                     .AllowAnyHeader()
                                     .AllowAnyMethod()
                                     .AllowCredentials();
