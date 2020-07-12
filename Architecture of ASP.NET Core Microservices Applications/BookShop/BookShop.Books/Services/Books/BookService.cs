@@ -9,6 +9,7 @@
     using BookShop.Books.Data;
     using BookShop.Books.Data.Models;
     using BookShop.Books.Services.Models.Books;
+    using BookShop.Data.Models;
     using BookShop.Messages.Books;
     using BookShop.Services.Identity;
     using MassTransit;
@@ -52,13 +53,24 @@
                   .ProjectTo<BookDetailsServiceModel>(mapper.ConfigurationProvider)
                   .FirstOrDefaultAsync();
 
-            await this.publisher.Publish(new BookViewedMessage
+            var messageData = new BookViewedMessage
             {
                 BookId = id,
                 UserId = string.IsNullOrEmpty(this.user.UserId)
                         ? string.Empty
                         : this.user.UserId
-            });
+            };
+
+            var message = new Message(messageData);
+
+            await this.db.AddAsync(message);
+            await this.db.SaveChangesAsync();
+            
+            await this.publisher.Publish(messageData);
+
+            var msg = await this.db.Messages.FindAsync(message.Id);
+            msg.MarkAsPublished();
+            await this.db.SaveChangesAsync();
 
             return details;
         }
@@ -111,15 +123,24 @@
                 book.Categories.Add(new CategoryBook { CategoryId = category.Id });
             }
 
-            await this.db.AddAsync(book);
-            await this.db.SaveChangesAsync();
-
-            await this.publisher.Publish(new BookCreatedMessage
+            var messageData = new BookCreatedMessage
             {
                 BookId = book.Id,
                 Title = book.Title,
                 Price = book.Price
-            });
+            };
+
+            var message = new Message(messageData);
+
+            await this.db.AddAsync(book);
+            await this.db.AddAsync(message);
+            await this.db.SaveChangesAsync();
+
+            await this.publisher.Publish(messageData);
+
+            var msg = await this.db.Messages.FindAsync(message.Id);
+            msg.MarkAsPublished();
+            await this.db.SaveChangesAsync();
 
             return book.Id;
         }

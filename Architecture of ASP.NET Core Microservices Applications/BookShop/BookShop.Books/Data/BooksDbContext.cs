@@ -2,9 +2,10 @@
 {
     using System.Reflection;
     using BookShop.Books.Data.Models;
+    using BookShop.Data;
     using Microsoft.EntityFrameworkCore;
     
-    public class BooksDbContext : DbContext
+    public class BooksDbContext : MessageDbContext
     {
         public BooksDbContext(DbContextOptions<BooksDbContext> options)
             : base(options)
@@ -19,11 +20,6 @@
 
         public DbSet<CategoryBook> CategoryBooks { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-            base.OnModelCreating(builder);
-        }
+        protected override Assembly ConfigurationsAssembly => Assembly.GetExecutingAssembly();
     }
 }

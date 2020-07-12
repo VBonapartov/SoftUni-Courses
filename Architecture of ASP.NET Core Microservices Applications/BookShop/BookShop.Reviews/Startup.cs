@@ -22,7 +22,8 @@ namespace BookShop.Reviews
             services
                 .AddWebService<ReviewsDbContext>(this.Configuration)
                 .AddTransient<IReviewService, ReviewService>()
-                .AddMessaging();
+                .AddMessaging()
+                .AddHangFire(this.Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

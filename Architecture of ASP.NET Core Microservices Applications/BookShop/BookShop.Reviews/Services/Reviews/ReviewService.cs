@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
+    using BookShop.Data.Models;
     using BookShop.Messages.Reviews;
     using BookShop.Reviews.Data;
     using BookShop.Reviews.Data.Models;
@@ -50,13 +51,25 @@
                 .ProjectTo<ReviewOutputModel>(mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
 
-            await this.publisher.Publish(new ReviewViewedMessage
+
+            var messageData = new ReviewViewedMessage
             {
                 ReviewId = id,
                 UserId = string.IsNullOrEmpty(this.user.UserId)
                         ? string.Empty
                         : this.user.UserId
-            }); 
+            };
+
+            var message = new Message(messageData);
+
+            await this.db.AddAsync(message);
+            await this.db.SaveChangesAsync();
+
+            await this.publisher.Publish(messageData);
+
+            var msg = await this.db.Messages.FindAsync(message.Id);
+            msg.MarkAsPublished();
+            await this.db.SaveChangesAsync();
 
             return details;
         }
@@ -90,13 +103,22 @@
                 BookName = bookName
             };
 
-            await this.db.Reviews.AddAsync(review);
-            await this.db.SaveChangesAsync();
-
-            await this.publisher.Publish(new ReviewCreatedMessage
+            var messageData = new ReviewCreatedMessage
             {
                 ReviewId = review.Id
-            });
+            };
+
+            var message = new Message(messageData);
+                        
+            await this.db.AddAsync(review);
+            await this.db.AddAsync(message);
+            await this.db.SaveChangesAsync();
+
+            await this.publisher.Publish(messageData);
+
+            var msg = await this.db.Messages.FindAsync(message.Id);
+            msg.MarkAsPublished();
+            await this.db.SaveChangesAsync();
         }
 
         public async Task Update(

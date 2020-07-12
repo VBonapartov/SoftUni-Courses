@@ -19,7 +19,9 @@ namespace BookShop.Books
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using Refit;    
+    using Refit;
+    using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+    using HealthChecks.UI.Client;
 
     public class Startup
     {
@@ -45,6 +47,7 @@ namespace BookShop.Books
                 .AddTransient<ICategoryService, CategoryService>()
                 .AddTransient<IBookService, BookService>()
                 .AddMessaging()
+                .AddHangFire(this.Configuration)
                 .AddControllersWithViews(options => options
                     .Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
                 
@@ -95,7 +98,6 @@ namespace BookShop.Books
                     .AllowAnyHeader()
                     .AllowAnyMethod());
 
-
             app.UseMiddleware<JwtCookieAuthenticationMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
@@ -106,6 +108,11 @@ namespace BookShop.Books
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+
+                endpoints.MapHealthChecks("/health", new HealthCheckOptions
+                {
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
             });
         }
     }

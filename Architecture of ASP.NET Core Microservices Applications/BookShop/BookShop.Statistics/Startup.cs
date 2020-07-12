@@ -1,7 +1,6 @@
 namespace BookShop.Statistics
 {
     using BookShop.Infrastructure;
-    using BookShop.Messages.Books;
     using BookShop.Services;
     using BookShop.Statistics.Data;
     using BookShop.Statistics.Messages;

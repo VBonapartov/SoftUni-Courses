@@ -4,7 +4,10 @@
     using System.Reflection;
     using System.Text;
     using AutoMapper;
+    using BookShop.Messages;
     using BookShop.Models;
+    using GreenPipes;
+    using Hangfire;
     using MassTransit;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.EntityFrameworkCore;
@@ -24,6 +27,7 @@
                 .AddDatabase<TDbContext>(configuration)
                 .AddApplicationSettings(configuration)
                 .AddTokenAuthentication(configuration)
+                .AddHealth(configuration)
                 .AddAutoMapperProfile(Assembly.GetCallingAssembly())
                 .AddControllers();
 
@@ -31,13 +35,19 @@
         }
 
         public static IServiceCollection AddDatabase<TDbContext>(
-            this IServiceCollection services,
-            IConfiguration configuration)
-            where TDbContext : DbContext
-            => services
-                .AddScoped<DbContext, TDbContext>()
-                .AddDbContext<TDbContext>(options => options
-                    .UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        this IServiceCollection services,
+        IConfiguration configuration)
+        where TDbContext : DbContext
+        => services
+            .AddScoped<DbContext, TDbContext>()
+            .AddDbContext<TDbContext>(options => options
+                .UseSqlServer(
+                    configuration.GetDefaultConnectionString(),
+                    sqlOptions => sqlOptions
+                        .EnableRetryOnFailure(
+                            maxRetryCount: 10,
+                            maxRetryDelay: TimeSpan.FromSeconds(30),
+                            errorNumbersToAdd: null)));
 
         public static IServiceCollection AddApplicationSettings(
             this IServiceCollection services,
@@ -96,6 +106,21 @@
                         .AddProfile(new MappingProfile(assembly)),
                     Array.Empty<Assembly>());
 
+        public static IServiceCollection AddHealth(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            var healthChecks = services.AddHealthChecks();
+
+            healthChecks
+                .AddSqlServer(configuration.GetDefaultConnectionString());
+
+            healthChecks
+                .AddRabbitMQ(rabbitConnectionString: "amqp://rabbitmq:rabbitmq@rabbitmq/");
+
+            return services;
+        }
+
         public static IServiceCollection AddMessaging(
             this IServiceCollection services,
             params Type[] consumers)
@@ -105,7 +130,7 @@
                 {
                     consumers.ForEach(consumer => mt.AddConsumer(consumer));
 
-                    mt.AddBus(bus => Bus.Factory.CreateUsingRabbitMq(rmq =>
+                    mt.AddBus(context => Bus.Factory.CreateUsingRabbitMq(rmq =>
                     {
                         rmq.Host("rabbitmq", host =>
                         {
@@ -113,13 +138,38 @@
                             host.Password("rabbitmq");
                         });
 
+                        rmq.UseHealthCheck(context);
+
                         consumers.ForEach(consumer => rmq.ReceiveEndpoint(consumer.FullName, endpoint =>
                         {
-                            endpoint.ConfigureConsumer(bus, consumer);
+                            endpoint.PrefetchCount = 6;
+                            endpoint.UseMessageRetry(retry => retry.Interval(10, 1000));
+
+                            endpoint.ConfigureConsumer(context, consumer);
                         }));
                     }));
                 })
                 .AddMassTransitHostedService();
+
+
+            return services;
+        }
+
+        public static IServiceCollection AddHangFire(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+
+            services
+                .AddHangfire(config => config
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(configuration.GetDefaultConnectionString()));
+
+            services.AddHangfireServer();
+
+            services.AddHostedService<MessagesHostedService>();
 
             return services;
         }

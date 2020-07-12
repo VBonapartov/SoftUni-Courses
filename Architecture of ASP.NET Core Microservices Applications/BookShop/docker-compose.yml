@@ -135,7 +135,17 @@ services:
             - bookshop-network
         depends_on:
             - data
-
+            
+    watchdog:
+        container_name: watchdog
+        build:
+            context: ./
+            dockerfile: ./BookShop.Watchdog/Dockerfile
+        ports: 
+            - "5013:80"         
+        networks: 
+            - bookshop-network
+         
 networks:
     bookshop-network:
 
