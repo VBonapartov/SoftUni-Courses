@@ -14,7 +14,7 @@
 
         public class Options
         {
-            public const int MinNumberOfPages =5;
+            public const int MinNumberOfPages = 5;
             public const int MaxNumberOfPages = 1000;
         }
 

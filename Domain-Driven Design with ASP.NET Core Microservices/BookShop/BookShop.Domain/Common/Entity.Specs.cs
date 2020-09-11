@@ -1,7 +1,7 @@
 ﻿namespace BookShop.Domain.Common
-{    
+{
     using FluentAssertions;
-    using Models.Books;
+    using Models.Authors;
     using Xunit;
 
     public class EntitySpecs

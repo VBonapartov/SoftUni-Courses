@@ -34,18 +34,12 @@
             var book = new Faker<Book>()
                 .CustomInstantiator(f => new Book(
                     f.Lorem.Letter(10),
-                    new Author($"Author{id}"),
                     A.Dummy<Publisher>(),
                     f.Random.Number(100, 200),
                     A.Dummy<Options>(),
                     isAvailable))
                 .Generate()
                 .SetId(id);
-
-            foreach (var review in GetReviews().Take(totalReviews))
-            {
-                book.AddReview(review);
-            }
 
             return book;
         }

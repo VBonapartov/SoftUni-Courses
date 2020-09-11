@@ -15,7 +15,6 @@
 
         internal Book(
             string title,
-            Author author,
             Publisher publisher,                        
             decimal price,
             Options options,
@@ -24,7 +23,6 @@
             this.Validate(title, price);
 
             this.Title = title;
-            this.Author = author;
             this.Publisher = publisher;
             this.Price = price;
             this.Options = options;
@@ -33,6 +31,7 @@
             this.reviews = new HashSet<Review>();
         }
 
+        // Необходим конструктор заради EF Core
         private Book(
             string title,
             decimal price,
@@ -42,7 +41,6 @@
             this.Price = price;
             this.IsAvailable = isAvailable;
 
-            this.Author = default!;
             this.Publisher = default!;
             this.Options = default!;
 
@@ -50,8 +48,6 @@
         }
 
         public string Title { get; private set; }
-
-        public Author Author { get; private set; }
 
         public Publisher Publisher { get; private set; }
 
@@ -65,16 +61,6 @@
         {
             this.ValidateTitle(title);
             this.Title = title;
-
-            return this;
-        }
-
-        public Book UpdateAuthor(string author)
-        {
-            if (this.Author.Name != author)
-            {
-                this.Author = new Author(author);
-            }
 
             return this;
         }
@@ -110,10 +96,6 @@
 
             return this;
         }
-
-        public IReadOnlyCollection<Review> Reviews => this.reviews.ToList().AsReadOnly();
-
-        public void AddReview(Review review) => this.reviews.Add(review);
 
         private void Validate(string title, decimal price)
         {

@@ -8,7 +8,7 @@
     public class ReviewSpecs
     {
         [Fact]
-        public void ValidAuthorShouldNotThrowException()
+        public void ValidReviewShouldNotThrowException()
         {
             // Act
             Action act = () => new Review("Valid title", "Valid description");

@@ -16,6 +16,7 @@
             this.Description = description;
         }
 
+        // Необходим конструктор за EF Core
         private Review(string title)
         {
             this.Title = title;

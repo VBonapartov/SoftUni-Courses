@@ -1,7 +1,8 @@
-﻿namespace BookShop.Domain.Models.Books
+﻿namespace BookShop.Domain.Models.Authors
 {
     using System;
     using FakeItEasy;
+    using Models.Authors;
 
     public class AuthorDummyFactory : IDummyFactory
     {
