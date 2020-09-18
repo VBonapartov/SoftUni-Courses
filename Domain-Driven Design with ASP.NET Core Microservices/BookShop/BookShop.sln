@@ -4,7 +4,9 @@ VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookShop.Domain", "BookShop.Domain\BookShop.Domain.csproj", "{DB2C5B28-CE46-4145-A988-13C85F840E5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookShop.Application", "BookShop.Application\BookShop.Application.csproj", "{0A169A69-4E8E-4F89-ABC9-60141A0F268C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookShop.Application", "BookShop.Application\BookShop.Application.csproj", "{0A169A69-4E8E-4F89-ABC9-60141A0F268C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookShop.Infrastructure", "BookShop.Infrastructure\BookShop.Infrastructure.csproj", "{F8CB10EB-371B-409C-97D3-3823D0281CB8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +22,10 @@ Global
 		{0A169A69-4E8E-4F89-ABC9-60141A0F268C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A169A69-4E8E-4F89-ABC9-60141A0F268C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A169A69-4E8E-4F89-ABC9-60141A0F268C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8CB10EB-371B-409C-97D3-3823D0281CB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8CB10EB-371B-409C-97D3-3823D0281CB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8CB10EB-371B-409C-97D3-3823D0281CB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8CB10EB-371B-409C-97D3-3823D0281CB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
