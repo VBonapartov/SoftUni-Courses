@@ -25,11 +25,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BookShop.Application\BookShop.Application.csproj" />
-    <ProjectReference Include="..\BookShop.Domain\BookShop.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\Persistence\Migrations\" />
     <Folder Include="Reviews\Configurations\" />
   </ItemGroup>
 

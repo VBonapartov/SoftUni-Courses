@@ -14,7 +14,7 @@
     using Infrastructure.Common.Persistence;
     using Microsoft.EntityFrameworkCore;
 
-    internal class ReviewRepository : DataRepository<Review>, IReviewRepository
+    internal class ReviewRepository : DataRepository<IReviewsDbContext, Review>, IReviewRepository
     {
         private readonly IMapper mapper;
 

@@ -46,7 +46,7 @@
                 //var factory = author == null
                 //    ? this.bookFactory.WithAuthor(request.Author)
                 //    : this.bookFactory.WithAuthor(author);
-
+                
                 var book = this.bookFactory
                     .WithTitle(request.Title)
                     .WithPublisher(publisher)

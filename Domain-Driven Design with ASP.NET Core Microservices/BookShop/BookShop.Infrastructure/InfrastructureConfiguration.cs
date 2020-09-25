@@ -4,6 +4,10 @@
     using Application.Common;
     using Application.Common.Contracts;
     using Application.Identity;
+    using BookShop.Infrastructure.Books;
+    using BookShop.Infrastructure.Common;
+    using BookShop.Infrastructure.Common.Events;
+    using BookShop.Infrastructure.Reviews;
     using Common.Persistence;
     using Identity;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -21,7 +25,8 @@
             => services
                 .AddDatabase(configuration)
                 .AddRepositories()
-                .AddIdentity(configuration);
+                .AddIdentity(configuration)
+                .AddTransient<IEventDispatcher, EventDispatcher>();
 
         private static IServiceCollection AddDatabase(
             this IServiceCollection services,
@@ -32,8 +37,10 @@
                         configuration.GetConnectionString("DefaultConnection"),
                         sqlServer => sqlServer
                             .MigrationsAssembly(typeof(BookShopDbContext)
-                                .Assembly.FullName)));
-                //.AddTransient<IInitializer, CarRentalDbInitializer>();
+                                .Assembly.FullName)))
+                .AddScoped<IBooksDbContext>(provider => provider.GetService<BookShopDbContext>())
+                .AddScoped<IReviewsDbContext>(provider => provider.GetService<BookShopDbContext>())
+                .AddTransient<IInitializer, DatabaseInitializer>();
 
         internal static IServiceCollection AddRepositories(this IServiceCollection services)
             => services

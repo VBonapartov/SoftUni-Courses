@@ -15,7 +15,7 @@
     using Infrastructure.Common.Persistence;
     using Microsoft.EntityFrameworkCore;
 
-    internal class AuthorRepository : DataRepository<Author>, IAuthorRepository
+    internal class AuthorRepository : DataRepository<IBooksDbContext, Author>, IAuthorRepository
     {
         private readonly IMapper mapper;
 

@@ -6,12 +6,13 @@
     using Application.Common.Contracts;
     using Domain.Common;
 
-    internal abstract class DataRepository<TEntity> : IRepository<TEntity>
+    internal abstract class DataRepository<TDbContext, TEntity> : IRepository<TEntity>
+        where TDbContext : IDbContext
         where TEntity : class, IAggregateRoot
     {
-        protected DataRepository(BookShopDbContext db) => this.Data = db;
+        protected DataRepository(TDbContext db) => this.Data = db;
 
-        protected BookShopDbContext Data { get; }
+        protected TDbContext Data { get; }
 
         protected IQueryable<TEntity> All() => this.Data.Set<TEntity>();
 
@@ -21,7 +22,7 @@
         {
             this.Data.Update(entity);
 
-            await this.Data.SaveChangesAsync(cancellationToken);
+            var result = await this.Data.SaveChangesAsync(cancellationToken);
         }
     }
 }
