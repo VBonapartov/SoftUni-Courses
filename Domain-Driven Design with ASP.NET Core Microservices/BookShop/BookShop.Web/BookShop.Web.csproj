@@ -25,4 +25,8 @@
     <ProjectReference Include="..\BookShop.Application\BookShop.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Reviews\" />
+  </ItemGroup>
+
 </Project>

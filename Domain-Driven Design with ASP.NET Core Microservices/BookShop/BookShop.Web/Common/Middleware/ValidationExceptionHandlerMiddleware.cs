@@ -1,4 +1,4 @@
-﻿namespace BookShop.Web.Middleware
+﻿namespace BookShop.Web.Common.Middleware
 {
     using System;
     using System.Net;

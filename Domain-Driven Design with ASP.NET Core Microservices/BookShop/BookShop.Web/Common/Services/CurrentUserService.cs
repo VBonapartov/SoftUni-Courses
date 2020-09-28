@@ -1,4 +1,4 @@
-﻿namespace BookShop.Web.Services
+﻿namespace BookShop.Web.Common.Services
 {
     using System;
     using System.Security.Claims;

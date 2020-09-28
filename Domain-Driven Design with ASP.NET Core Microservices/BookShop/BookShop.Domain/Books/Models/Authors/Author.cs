@@ -3,8 +3,9 @@
     using System.Collections.Generic;
     using System.Linq;
     using Books;
-    using BookShop.Domain.Common.Models;
+    using Domain.Books.Events.Books;    
     using Common;
+    using Domain.Common.Models;
     using Exceptions;
     
     using static Common.Models.ModelConstants.Common;
@@ -22,11 +23,11 @@
         }
 
         // Необходим конструктор за EF Core
-        private Author(string name, string phoneNumber = "")
-        {
-            this.Name = name;
-            this.books = new HashSet<Book>();
-        }
+        //private Author(string name)
+        //{
+        //    this.Name = name;
+        //    this.books = new HashSet<Book>();
+        //}
 
         public string Name { get; private set; }
 
@@ -40,7 +41,12 @@
 
         public IReadOnlyCollection<Book> Books => this.books.ToList().AsReadOnly();
 
-        public void AddBook(Book book) => this.books.Add(book);
+        public void AddBook(Book book)
+        {
+            this.books.Add(book);
+
+            this.AddEvent(new BookAddedEvent());
+        }
 
         private void Validate(string newName)
             => Guard.ForStringLength<InvalidAuthorException>(

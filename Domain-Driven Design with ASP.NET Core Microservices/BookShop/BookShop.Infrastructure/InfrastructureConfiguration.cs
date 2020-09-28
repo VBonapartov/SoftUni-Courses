@@ -8,6 +8,7 @@
     using BookShop.Infrastructure.Common;
     using BookShop.Infrastructure.Common.Events;
     using BookShop.Infrastructure.Reviews;
+    using BookShop.Infrastructure.Statistics;
     using Common.Persistence;
     using Identity;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -40,6 +41,7 @@
                                 .Assembly.FullName)))
                 .AddScoped<IBooksDbContext>(provider => provider.GetService<BookShopDbContext>())
                 .AddScoped<IReviewsDbContext>(provider => provider.GetService<BookShopDbContext>())
+                .AddScoped<IStatisticsDbContext>(provider => provider.GetService<BookShopDbContext>())
                 .AddTransient<IInitializer, DatabaseInitializer>();
 
         internal static IServiceCollection AddRepositories(this IServiceCollection services)

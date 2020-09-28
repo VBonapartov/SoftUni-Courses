@@ -11,7 +11,7 @@
         public void ValidReviewShouldNotThrowException()
         {
             // Act
-            Action act = () => new Review("123", "Valid title", "Valid description");
+            Action act = () => new Review("123", 1, "Valid title", "Valid description");
 
             // Assert
             act.Should().NotThrow<InvalidReviewException>();
@@ -21,7 +21,7 @@
         public void InvalidTitleShouldThrowException()
         {
             // Act
-            Action act = () => new Review("123", "", "Valid description");
+            Action act = () => new Review("123", 1, "", "Valid description");
 
             // Assert
             act.Should().Throw<InvalidReviewException>();
@@ -31,7 +31,7 @@
         public void InvalidDescriptionShouldThrowException()
         {
             // Act
-            Action act = () => new Review("123", "Valid title", "");
+            Action act = () => new Review("123", 1, "Valid title", "");
 
             // Assert
             act.Should().Throw<InvalidReviewException>();

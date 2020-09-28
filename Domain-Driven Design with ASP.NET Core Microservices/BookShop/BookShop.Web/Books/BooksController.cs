@@ -1,8 +1,7 @@
-﻿namespace BookShop.Web.Features
+﻿namespace BookShop.Web.Books
 {
     using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Application.Common;
+    using System.Threading.Tasks;    
     using Application.Books.Books.Commands.ChangeAvailability;
     using Application.Books.Books.Commands.Create;
     using Application.Books.Books.Commands.Delete;
@@ -10,9 +9,11 @@
     using Application.Books.Books.Queries.Details;
     using Application.Books.Books.Queries.Publishers;
     using Application.Books.Books.Queries.Search;
+    using Application.Common;
+    using Domain.Books.Models.Books;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using BookShop.Domain.Books.Models.Books;
+    using Microsoft.AspNetCore.Mvc;    
+    using Web.Common;
 
     public class BooksController : ApiController
     {

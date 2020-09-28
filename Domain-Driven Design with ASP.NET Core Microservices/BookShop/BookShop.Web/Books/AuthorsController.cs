@@ -1,10 +1,11 @@
-﻿namespace BookShop.Web.Features
+﻿namespace BookShop.Web.Books
 {
     using System.Threading.Tasks;
     using Application.Common;
     using Application.Books.Authors.Commands.Edit;
     using Application.Books.Authors.Queries.Details;
-    using Microsoft.AspNetCore.Mvc;    
+    using Microsoft.AspNetCore.Mvc;
+    using Web.Common;
 
     public class AuthorsController : ApiController
     {

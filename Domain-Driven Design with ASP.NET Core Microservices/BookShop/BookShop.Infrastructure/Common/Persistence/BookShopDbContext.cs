@@ -8,16 +8,19 @@
     using Domain.Books.Models.Authors;
     using Domain.Books.Models.Books;
     using Domain.Reviews.Models;
+    using Domain.Statistics.Models;
     using Events;  
     using Identity;
     using Infrastructure.Books;
     using Infrastructure.Reviews;
+    using Infrastructure.Statistics;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore; 
+    using Microsoft.EntityFrameworkCore;    
 
     internal class BookShopDbContext : IdentityDbContext<User>,
         IBooksDbContext,
-        IReviewsDbContext
+        IReviewsDbContext,
+        IStatisticsDbContext
     {
         private readonly IEventDispatcher eventDispatcher;
         private bool eventsDispatched;
@@ -40,6 +43,10 @@
         public DbSet<Author> Authors { get; set; } = default!;
 
         public DbSet<Review> Reviews { get; set; } = default!;
+
+        public DbSet<Statistics> Statistics { get; set; } = default!;
+
+        public DbSet<BookView> BookViews { get; set; } = default!;
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

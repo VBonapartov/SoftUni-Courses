@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Common\Persistence\Migrations\20200927075500_StatisticsTables.cs" />
+    <Compile Remove="Common\Persistence\Migrations\20200927075500_StatisticsTables.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectCapability Include="DynamicFileNesting" />
   </ItemGroup>
 
@@ -25,10 +30,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BookShop.Application\BookShop.Application.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Reviews\Configurations\" />
   </ItemGroup>
 
 </Project>

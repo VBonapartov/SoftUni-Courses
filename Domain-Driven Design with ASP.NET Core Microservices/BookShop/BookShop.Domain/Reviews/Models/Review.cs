@@ -8,24 +8,28 @@
 
     public class Review : Entity<int>, IAggregateRoot
     {
-        internal Review(string userId, string title, string description)
+        internal Review(string userId, int bookId, string title, string description)
         {
             this.ValidateTitle(title);
             this.ValidateDescription(description);
 
             this.UserId = userId;
+            this.BookId = bookId;
             this.Title = title;
             this.Description = description;
         }
 
-        private Review(string userId, string title)
+        private Review(string userId, int bookId, string title)
         {
             this.UserId = userId;
+            this.BookId = bookId;
             this.Title = title;
             this.Description = default!;
         }
 
         public string UserId { get; private set; }
+
+        public int BookId { get; private set; }
 
         public string Title { get; private set; }
 

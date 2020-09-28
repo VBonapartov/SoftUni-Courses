@@ -5,6 +5,8 @@
     public abstract class ReviewCommand<TCommand> : EntityCommand<int>
             where TCommand : EntityCommand<int>
     {
+        public int BookId { get; set; } = default!;
+
         public string Title { get; set; } = default!;
 
         public string Description { get; set; } = default!;

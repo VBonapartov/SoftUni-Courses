@@ -19,6 +19,7 @@
                 => new Faker<Review>()
                     .CustomInstantiator(f => new Review(
                         f.Random.Number(1, 99).ToString(),
+                         f.Random.Number(1, 99),
                         f.Lorem.Letter(10),
                         f.Lorem.Letter(100)))
                     .Generate()

@@ -1,4 +1,4 @@
-﻿namespace BookShop.Web
+﻿namespace BookShop.Web.Common
 {
     using System.Threading.Tasks;
     using Application.Common;

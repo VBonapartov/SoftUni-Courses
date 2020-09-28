@@ -9,8 +9,6 @@
 
     public class Book : Entity<int>, IAggregateRoot
     {
-        //private readonly HashSet<Review> reviews;
-
         internal Book(
             string title,
             Publisher publisher,                        
@@ -25,8 +23,6 @@
             this.Price = price;
             this.Options = options;
             this.IsAvailable = isAvailable;
-
-            //this.reviews = new HashSet<Review>();
         }
 
         // Необходим конструктор заради EF Core
@@ -41,8 +37,6 @@
 
             this.Publisher = default!;
             this.Options = default!;
-
-            //this.reviews = new HashSet<Review>();
         }
 
         public string Title { get; private set; }

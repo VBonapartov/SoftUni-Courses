@@ -43,6 +43,7 @@
 
                 var review = this.reviewFactory
                     .WithAuthor(this.currentUser.UserId)
+                    .WithBook(request.BookId)
                     .WithTitle(request.Title)
                     .WithDescription(request.Description)
                     .Build();

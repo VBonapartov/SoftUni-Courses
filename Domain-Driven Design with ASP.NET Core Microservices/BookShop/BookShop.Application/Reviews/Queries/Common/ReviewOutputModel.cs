@@ -7,6 +7,8 @@
     {
         public int Id { get; private set; }
 
+        public string BookId { get; private set; } = default!;
+
         public string Title { get; private set; } = default!;
 
         public string Description { get; private set; } = default!;

@@ -1,11 +1,12 @@
-﻿namespace BookShop.Web.Features
+﻿namespace BookShop.Web.Identity
 {
     using System.Threading.Tasks;
     using Application.Identity.Commands.ChangePassword;
     using Application.Identity.Commands.CreateUser;
-    using Application.Identity.Commands.LoginUser;
+    using Application.Identity.Commands.LoginUser;    
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Web.Common;
 
     public class IdentityController : ApiController
     {

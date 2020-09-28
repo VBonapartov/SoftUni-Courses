@@ -1,6 +1,6 @@
 namespace BookShop.Startup
 {
-    using Application;
+    using Application; 
     using Domain;
     using Infrastructure;
     using Microsoft.AspNetCore.Builder;
@@ -9,7 +9,7 @@ namespace BookShop.Startup
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Web;
-    using Web.Middleware;
+    using Web.Common.Middleware;
 
     public class Startup
     {
