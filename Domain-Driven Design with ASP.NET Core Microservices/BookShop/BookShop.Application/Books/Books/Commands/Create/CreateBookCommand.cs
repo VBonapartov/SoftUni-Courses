@@ -2,27 +2,27 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using Application.Books.Authors;
     using Application.Common.Contracts;    
-    using Common;
-    using Domain.Common.Models;
+    using Common;    
     using Domain.Books.Factories.Books;
-    using Domain.Books.Models.Books;    
-    using MediatR;
+    using Domain.Books.Models.Books;
+    using Domain.Books.Repositories;
+    using Domain.Common.Models;
+    using MediatR;    
 
     public class CreateBookCommand : BookCommand<CreateBookCommand>, IRequest<CreateBookOutputModel>
     {
         public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, CreateBookOutputModel>
         {
             private readonly ICurrentUser currentUser;
-            private readonly IAuthorRepository authorRepository;
-            private readonly IBookRepository bookRepository;
+            private readonly IAuthorDomainRepository authorRepository;
+            private readonly IBookDomainRepository bookRepository;
             private readonly IBookFactory bookFactory;
 
             public CreateBookCommandHandler(
                 ICurrentUser currentUser,
-                IAuthorRepository authorRepository,
-                IBookRepository bookRepository,
+                IAuthorDomainRepository authorRepository,
+                IBookDomainRepository bookRepository,
                 IBookFactory bookFactory)
             {
                 this.currentUser = currentUser;

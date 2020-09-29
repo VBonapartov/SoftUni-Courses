@@ -1,6 +1,6 @@
 ﻿namespace BookShop.Infrastructure.Identity
 {
-    public interface IJwtTokenGenerator
+    internal interface IJwtTokenGenerator
     {
         string GenerateToken(User user);
     }

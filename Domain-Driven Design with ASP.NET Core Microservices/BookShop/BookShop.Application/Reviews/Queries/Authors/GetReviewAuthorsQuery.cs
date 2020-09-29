@@ -12,9 +12,9 @@
             GetReviewAuthorsQuery,
             IEnumerable<GetReviewAuthorOutputModel>>
         {
-            private readonly IReviewRepository reviewRepository;
+            private readonly IReviewQueryRepository reviewRepository;
 
-            public GetReviewAuthorsQueryHandler(IReviewRepository reviewRepository)
+            public GetReviewAuthorsQueryHandler(IReviewQueryRepository reviewRepository)
                 => this.reviewRepository = reviewRepository;
 
             public async Task<IEnumerable<GetReviewAuthorOutputModel>> Handle(

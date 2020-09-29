@@ -5,7 +5,7 @@
 
     public class EditReviewCommandValidator : AbstractValidator<EditReviewCommand>
     {
-        public EditReviewCommandValidator(IReviewRepository reviewRepository)
+        public EditReviewCommandValidator(IReviewQueryRepository reviewRepository)
             => this.Include(new ReviewCommandValidator<EditReviewCommand>(reviewRepository));
     }
 }

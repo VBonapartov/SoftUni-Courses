@@ -10,9 +10,9 @@
 
         public class GetBookViewsQueryHandler : IRequestHandler<GetBookViewsQuery, int>
         {
-            private readonly IStatisticsRepository statistics;
+            private readonly IStatisticsQueryRepository statistics;
 
-            public GetBookViewsQueryHandler(IStatisticsRepository statistics)
+            public GetBookViewsQueryHandler(IStatisticsQueryRepository statistics)
                 => this.statistics = statistics;
 
             public Task<int> Handle(

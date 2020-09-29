@@ -3,12 +3,13 @@
     using System.Threading.Tasks;    
     using Common;
     using Domain.Books.Events.Books;
+    using Domain.Statistics.Repositories;
 
     public class BookAddedEventHandler : IEventHandler<BookAddedEvent>
     {
-        private readonly IStatisticsRepository statistics;
+        private readonly IStatisticsDomainRepository statistics;
 
-        public BookAddedEventHandler(IStatisticsRepository statistics)
+        public BookAddedEventHandler(IStatisticsDomainRepository statistics)
             => this.statistics = statistics;
 
         public Task Handle(BookAddedEvent domainEvent)

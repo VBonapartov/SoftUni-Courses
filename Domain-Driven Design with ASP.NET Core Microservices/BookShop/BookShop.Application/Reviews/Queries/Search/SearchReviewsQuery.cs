@@ -11,7 +11,7 @@
             SearchReviewsQuery,
             SearchReviewsOutputModel>
         {
-            public SearchReviewsQueryHandler(IReviewRepository reviewRepository)
+            public SearchReviewsQueryHandler(IReviewQueryRepository reviewRepository)
                 : base(reviewRepository)
             {
             }

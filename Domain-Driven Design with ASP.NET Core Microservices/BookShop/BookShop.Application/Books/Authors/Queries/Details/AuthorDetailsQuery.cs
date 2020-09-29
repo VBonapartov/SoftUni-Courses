@@ -10,9 +10,9 @@
 
         public class AuthorDetailsQueryHandler : IRequestHandler<AuthorDetailsQuery, AuthorDetailsOutputModel>
         {
-            private readonly IAuthorRepository authorRepository;
+            private readonly IAuthorQueryRepository authorRepository;
 
-            public AuthorDetailsQueryHandler(IAuthorRepository authorRepository)
+            public AuthorDetailsQueryHandler(IAuthorQueryRepository authorRepository)
                 => this.authorRepository = authorRepository;
 
             public async Task<AuthorDetailsOutputModel> Handle(

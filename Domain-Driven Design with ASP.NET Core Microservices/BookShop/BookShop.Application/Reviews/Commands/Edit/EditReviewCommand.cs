@@ -3,8 +3,9 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Application.Common;
-    using Application.Common.Contracts;
+    using Application.Common.Contracts;    
     using Commands.Common;
+    using Domain.Reviews.Repositories;
     using MediatR;
 
     public class EditReviewCommand : ReviewCommand<EditReviewCommand>, IRequest<Result>
@@ -12,11 +13,11 @@
         public class EditReviewCommandHandler : IRequestHandler<EditReviewCommand, Result>
         {
             private readonly ICurrentUser currentUser;
-            private readonly IReviewRepository reviewRepository;
+            private readonly IReviewDomainRepository reviewRepository;
 
             public EditReviewCommandHandler(
                 ICurrentUser currentUser,
-                IReviewRepository reviewRepository)
+                IReviewDomainRepository reviewRepository)
             {
                 this.currentUser = currentUser;
                 this.reviewRepository = reviewRepository;

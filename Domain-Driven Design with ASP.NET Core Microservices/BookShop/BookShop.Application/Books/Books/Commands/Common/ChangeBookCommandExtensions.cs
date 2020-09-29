@@ -3,14 +3,14 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Application.Common;
-    using Authors;
     using Application.Common.Contracts;
+    using Domain.Books.Repositories;
 
     internal static class ChangeCarAdCommandExtensions
     {
         public static async Task<Result> AuthorHasBook(
             this ICurrentUser currentUser,
-            IAuthorRepository authorRepository,
+            IAuthorDomainRepository authorRepository,
             int bookId,
             CancellationToken cancellationToken)
         {

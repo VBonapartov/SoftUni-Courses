@@ -11,7 +11,7 @@
             SearchBooksQuery,
             SearchBooksOutputModel>
         {
-            public SearchBooksQueryHandler(IBookRepository bookRepository)
+            public SearchBooksQueryHandler(IBookQueryRepository bookRepository)
                 : base(bookRepository)
             {
             }

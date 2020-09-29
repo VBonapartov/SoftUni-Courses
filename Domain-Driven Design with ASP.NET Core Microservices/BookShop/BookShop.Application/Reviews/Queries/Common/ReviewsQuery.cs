@@ -24,9 +24,9 @@
 
         public abstract class ReviewsQueryHandler
         {
-            private readonly IReviewRepository reviewRepository;
+            private readonly IReviewQueryRepository reviewRepository;
 
-            protected ReviewsQueryHandler(IReviewRepository reviewRepository)
+            protected ReviewsQueryHandler(IReviewQueryRepository reviewRepository)
                 => this.reviewRepository = reviewRepository;
 
             protected async Task<IEnumerable<TOutputModel>> GetReviewListings<TOutputModel>(

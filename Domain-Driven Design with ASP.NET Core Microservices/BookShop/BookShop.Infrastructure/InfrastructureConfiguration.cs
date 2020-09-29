@@ -3,14 +3,15 @@
     using System.Text;
     using Application.Common;
     using Application.Common.Contracts;
-    using Application.Identity;
-    using BookShop.Infrastructure.Books;
-    using BookShop.Infrastructure.Common;
-    using BookShop.Infrastructure.Common.Events;
-    using BookShop.Infrastructure.Reviews;
-    using BookShop.Infrastructure.Statistics;
+    using Application.Identity;    
     using Common.Persistence;
-    using Identity;
+    using Domain.Common;
+    using Identity;   
+    using Infrastructure.Books;
+    using Infrastructure.Common;
+    using Infrastructure.Common.Events;
+    using Infrastructure.Reviews;
+    using Infrastructure.Statistics;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,8 @@
             IConfiguration configuration)
             => services
                 .AddDatabase(configuration)
-                .AddRepositories()
+                .AddDomainRepositories()
+                .AddQueryRepositories()
                 .AddIdentity(configuration)
                 .AddTransient<IEventDispatcher, EventDispatcher>();
 
@@ -44,13 +46,22 @@
                 .AddScoped<IStatisticsDbContext>(provider => provider.GetService<BookShopDbContext>())
                 .AddTransient<IInitializer, DatabaseInitializer>();
 
-        internal static IServiceCollection AddRepositories(this IServiceCollection services)
+        private static IServiceCollection AddDomainRepositories(this IServiceCollection services)
             => services
                 .Scan(scan => scan
                     .FromCallingAssembly()
                     .AddClasses(classes => classes
-                        .AssignableTo(typeof(IRepository<>)))
-                    .AsMatchingInterface()
+                        .AssignableTo(typeof(IDomainRepository<>)))
+                    .AsImplementedInterfaces()
+                    .WithTransientLifetime());
+
+        private static IServiceCollection AddQueryRepositories(this IServiceCollection services)
+            => services
+                .Scan(scan => scan
+                    .FromCallingAssembly()
+                    .AddClasses(classes => classes
+                        .AssignableTo(typeof(IQueryRepository<>)))
+                    .AsImplementedInterfaces()
                     .WithTransientLifetime());
 
         private static IServiceCollection AddIdentity(

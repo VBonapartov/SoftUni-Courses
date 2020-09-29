@@ -4,7 +4,7 @@
     using Infrastructure.Common.Persistence;
     using Microsoft.EntityFrameworkCore;
 
-    public interface IReviewsDbContext : IDbContext
+    internal interface IReviewsDbContext : IDbContext
     {
         DbSet<Review> Reviews { get; }
     }

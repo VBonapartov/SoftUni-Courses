@@ -32,9 +32,9 @@
 
         public abstract class BooksQueryHandler
         {
-            private readonly IBookRepository bookRepository;
+            private readonly IBookQueryRepository bookRepository;
 
-            protected BooksQueryHandler(IBookRepository bookRepository)
+            protected BooksQueryHandler(IBookQueryRepository bookRepository)
                 => this.bookRepository = bookRepository;
 
             protected async Task<IEnumerable<TOutputModel>> GetBookListings<TOutputModel>(

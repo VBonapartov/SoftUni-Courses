@@ -11,12 +11,13 @@
     using AutoMapper;    
     using Common;
     using Domain.Books.Models.Authors;
-    using Domain.Books.Models.Books;    
+    using Domain.Books.Models.Books;
+    using Domain.Books.Repositories;
     using Domain.Common;
     using Infrastructure.Common.Persistence;
     using Microsoft.EntityFrameworkCore;    
 
-    internal class BookRepository : DataRepository<IBooksDbContext, Book>, IBookRepository
+    internal class BookRepository : DataRepository<IBooksDbContext, Book>, IBookQueryRepository, IBookDomainRepository
     {
         private readonly IMapper mapper;
 

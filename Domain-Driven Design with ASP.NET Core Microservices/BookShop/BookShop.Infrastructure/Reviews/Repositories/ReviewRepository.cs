@@ -10,11 +10,12 @@
     using AutoMapper;   
     using Domain.Common;
     using Domain.Reviews.Models;
+    using Domain.Reviews.Repositories;
     using Infrastructure.Common;
     using Infrastructure.Common.Persistence;
     using Microsoft.EntityFrameworkCore;
 
-    internal class ReviewRepository : DataRepository<IReviewsDbContext, Review>, IReviewRepository
+    internal class ReviewRepository : DataRepository<IReviewsDbContext, Review>, IReviewQueryRepository, IReviewDomainRepository
     {
         private readonly IMapper mapper;
 

@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using Application.Common;
     using Application.Common.Contracts;
+    using Domain.Reviews.Repositories;
     using MediatR;
 
     public class DeleteReviewCommand : EntityCommand<int>, IRequest<Result>
@@ -11,11 +12,11 @@
         public class DeleteReviewCommandHandler : IRequestHandler<DeleteReviewCommand, Result>
         {
             private readonly ICurrentUser currentUser;
-            private readonly IReviewRepository reviewRepository;
+            private readonly IReviewDomainRepository reviewRepository;
 
             public DeleteReviewCommandHandler(
                 ICurrentUser currentUser,
-                IReviewRepository reviewRepository)
+                IReviewDomainRepository reviewRepository)
             {
                 this.currentUser = currentUser;
                 this.reviewRepository = reviewRepository;

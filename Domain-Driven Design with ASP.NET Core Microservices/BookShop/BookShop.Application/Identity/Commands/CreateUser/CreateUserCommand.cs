@@ -1,10 +1,10 @@
 ﻿namespace BookShop.Application.Identity.Commands.CreateUser
 {
     using System.Threading;
-    using System.Threading.Tasks;
-    using Application.Books.Authors;
+    using System.Threading.Tasks; 
     using Common;    
     using Domain.Books.Factories.Authors;
+    using Domain.Books.Repositories;
     using MediatR;
 
     public class CreateUserCommand : UserInputModel, IRequest<Result>
@@ -17,12 +17,12 @@
         {
             private readonly IIdentity identity;
             private readonly IAuthorFactory authorFactory;
-            private readonly IAuthorRepository authorRepository;
+            private readonly IAuthorDomainRepository authorRepository;
 
             public CreateUserCommandHandler(
                 IIdentity identity,
                 IAuthorFactory authorFactory,
-                IAuthorRepository authorRepository)
+                IAuthorDomainRepository authorRepository)
             {
                 this.identity = identity;
                 this.authorFactory = authorFactory;

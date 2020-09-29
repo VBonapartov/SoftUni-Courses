@@ -4,24 +4,24 @@
     using System.Threading.Tasks;
     using Application.Common;    
     using Application.Common.Contracts;
-    using Authors;
     using Common;
     using Domain.Common.Models;
-    using Domain.Books.Models.Books;    
-    using MediatR;
+    using Domain.Books.Models.Books;
+    using Domain.Books.Repositories;
+    using MediatR;    
 
     public class EditBookCommand : BookCommand<EditBookCommand>, IRequest<Result>
     {
         public class EditBookCommandHandler : IRequestHandler<EditBookCommand, Result>
         {
             private readonly ICurrentUser currentUser;
-            private readonly IBookRepository bookRepository;
-            private readonly IAuthorRepository authorRepository;
+            private readonly IBookDomainRepository bookRepository;
+            private readonly IAuthorDomainRepository authorRepository;
 
             public EditBookCommandHandler(
                 ICurrentUser currentUser,
-                IBookRepository bookRepository,
-                IAuthorRepository authorRepository)
+                IBookDomainRepository bookRepository,
+                IAuthorDomainRepository authorRepository)
             {
                 this.currentUser = currentUser;
                 this.bookRepository = bookRepository;

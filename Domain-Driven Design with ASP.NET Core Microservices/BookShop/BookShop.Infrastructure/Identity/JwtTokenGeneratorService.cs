@@ -8,7 +8,7 @@
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
 
-    public class JwtTokenGeneratorService : IJwtTokenGenerator
+    internal class JwtTokenGeneratorService : IJwtTokenGenerator
     {
         private readonly ApplicationSettings applicationSettings;
 

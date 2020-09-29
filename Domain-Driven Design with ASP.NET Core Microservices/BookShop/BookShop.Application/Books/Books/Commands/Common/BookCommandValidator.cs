@@ -12,7 +12,7 @@
     public class BookCommandValidator<TCommand> : AbstractValidator<BookCommand<TCommand>>
         where TCommand : EntityCommand<int>
     {
-        public BookCommandValidator(IBookRepository bookRepository)
+        public BookCommandValidator(IBookQueryRepository bookRepository)
         {
             this.RuleFor(c => c.Title)
                 .MinimumLength(MinTitleLength)

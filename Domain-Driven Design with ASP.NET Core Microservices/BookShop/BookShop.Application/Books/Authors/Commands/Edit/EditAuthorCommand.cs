@@ -1,9 +1,10 @@
 ﻿namespace BookShop.Application.Books.Authors.Commands.Edit
 {
     using System.Threading;
-    using System.Threading.Tasks;
+    using System.Threading.Tasks; 
     using Common;
     using Common.Contracts;
+    using Domain.Books.Repositories;
     using MediatR;
 
     public class EditAuthorCommand : EntityCommand<int>, IRequest<Result>
@@ -13,11 +14,11 @@
         public class EditAuthorCommandHandler : IRequestHandler<EditAuthorCommand, Result>
         {
             private readonly ICurrentUser currentUser;
-            private readonly IAuthorRepository authorRepository;
+            private readonly IAuthorDomainRepository authorRepository;
 
             public EditAuthorCommandHandler(
                 ICurrentUser currentUser,
-                IAuthorRepository authorRepository)
+                IAuthorDomainRepository authorRepository)
             {
                 this.currentUser = currentUser;
                 this.authorRepository = authorRepository;

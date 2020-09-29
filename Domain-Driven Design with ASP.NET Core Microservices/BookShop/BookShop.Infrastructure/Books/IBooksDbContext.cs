@@ -6,7 +6,7 @@
     using Identity;
     using Microsoft.EntityFrameworkCore;
 
-    public interface IBooksDbContext : IDbContext
+    internal interface IBooksDbContext : IDbContext
     {
         DbSet<Book> Books { get; }
 

@@ -2,9 +2,10 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using Application.Common.Contracts;
+    using Application.Common.Contracts;    
     using Common;
-    using Domain.Reviews.Factories;    
+    using Domain.Reviews.Factories;
+    using Domain.Reviews.Repositories;
     using MediatR;
 
     public class CreateReviewCommand : ReviewCommand<CreateReviewCommand>, IRequest<CreateReviewOutputModel>
@@ -12,12 +13,12 @@
         public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, CreateReviewOutputModel>
         {
             private readonly ICurrentUser currentUser;
-            private readonly IReviewRepository reviewRepository;
+            private readonly IReviewDomainRepository reviewRepository;
             private readonly IReviewFactory reviewFactory;
 
             public CreateReviewCommandHandler(
                 ICurrentUser currentUser,
-                IReviewRepository reviewRepository,
+                IReviewDomainRepository reviewRepository,
                 IReviewFactory reviewFactory)
             {
                 this.currentUser = currentUser;

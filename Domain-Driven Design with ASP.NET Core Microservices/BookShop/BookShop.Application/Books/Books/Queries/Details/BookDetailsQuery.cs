@@ -10,12 +10,12 @@
     {
         public class BookDetailsQueryHandler : IRequestHandler<BookDetailsQuery, BookDetailsOutputModel>
         {
-            private readonly IBookRepository bookRepository;
-            private readonly IAuthorRepository authorRepository;
+            private readonly IBookQueryRepository bookRepository;
+            private readonly IAuthorQueryRepository authorRepository;
 
             public BookDetailsQueryHandler(
-                IBookRepository bookRepository,
-                IAuthorRepository authorRepository)
+                IBookQueryRepository bookRepository,
+                IAuthorQueryRepository authorRepository)
             {
                 this.bookRepository = bookRepository;
                 this.authorRepository = authorRepository;

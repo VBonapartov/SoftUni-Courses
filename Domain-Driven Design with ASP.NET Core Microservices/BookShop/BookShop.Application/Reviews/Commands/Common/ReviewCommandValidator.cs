@@ -8,7 +8,7 @@
     public class ReviewCommandValidator<TCommand> : AbstractValidator<ReviewCommand<TCommand>>
         where TCommand : EntityCommand<int>
     {
-        public ReviewCommandValidator(IReviewRepository reviewRepository)
+        public ReviewCommandValidator(IReviewQueryRepository reviewRepository)
         {
             this.RuleFor(c => c.Title)
                 .MinimumLength(MinTitleLength)

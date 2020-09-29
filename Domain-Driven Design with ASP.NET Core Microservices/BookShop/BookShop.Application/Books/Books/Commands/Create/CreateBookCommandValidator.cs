@@ -5,7 +5,7 @@
 
     public class CreateBookCommandValidator : AbstractValidator<CreateBookCommand>
     {
-        public CreateBookCommandValidator(IBookRepository bookRepository)
+        public CreateBookCommandValidator(IBookQueryRepository bookRepository)
             => this.Include(new BookCommandValidator<CreateBookCommand>(bookRepository));
     }
 }

@@ -11,9 +11,9 @@
             GetBookPublishersQuery,
             IEnumerable<GetBookPublisherOutputModel>>
         {
-            private readonly IBookRepository bookRepository;
+            private readonly IBookQueryRepository bookRepository;
 
-            public GetBookAuthorsQueryHandler(IBookRepository bookRepository)
+            public GetBookAuthorsQueryHandler(IBookQueryRepository bookRepository)
                 => this.bookRepository = bookRepository;
 
             public async Task<IEnumerable<GetBookPublisherOutputModel>> Handle(

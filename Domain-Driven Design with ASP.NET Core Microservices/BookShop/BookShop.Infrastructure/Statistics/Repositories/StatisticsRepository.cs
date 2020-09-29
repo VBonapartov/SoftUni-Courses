@@ -4,12 +4,13 @@
     using System.Threading.Tasks;
     using Application.Statistics;
     using Application.Statistics.Queries.Current;
-    using AutoMapper;
+    using AutoMapper;   
     using Common.Persistence;
     using Domain.Statistics.Models;
+    using Domain.Statistics.Repositories;
     using Microsoft.EntityFrameworkCore;
 
-    internal class StatisticsRepository : DataRepository<IStatisticsDbContext, Statistics>, IStatisticsRepository
+    internal class StatisticsRepository : DataRepository<IStatisticsDbContext, Statistics>, IStatisticsQueryRepository, IStatisticsDomainRepository
     {
         private readonly IMapper mapper;
 

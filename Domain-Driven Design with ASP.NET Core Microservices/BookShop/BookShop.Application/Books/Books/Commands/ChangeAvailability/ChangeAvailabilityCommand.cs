@@ -2,10 +2,10 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using Application.Books.Authors;
     using Application.Common;
-    using Application.Common.Contracts;
+    using Application.Common.Contracts;    
     using Commands.Common;
+    using Domain.Books.Repositories;
     using MediatR;   
 
     public class ChangeAvailabilityCommand : EntityCommand<int>, IRequest<Result>
@@ -13,13 +13,13 @@
         public class ChangeAvailabilityCommandHandler : IRequestHandler<ChangeAvailabilityCommand, Result>
         {
             private readonly ICurrentUser currentUser;
-            private readonly IBookRepository bookRepository;
-            private readonly IAuthorRepository authorRepository;
+            private readonly IBookDomainRepository bookRepository;
+            private readonly IAuthorDomainRepository authorRepository;
 
             public ChangeAvailabilityCommandHandler(
                 ICurrentUser currentUser,
-                IBookRepository bookRepository,
-                IAuthorRepository authorRepository)
+                IBookDomainRepository bookRepository,
+                IAuthorDomainRepository authorRepository)
             {
                 this.currentUser = currentUser;
                 this.bookRepository = bookRepository;
