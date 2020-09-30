@@ -46,7 +46,7 @@
                 .AddScoped<IStatisticsDbContext>(provider => provider.GetService<BookShopDbContext>())
                 .AddTransient<IInitializer, DatabaseInitializer>();
 
-        private static IServiceCollection AddDomainRepositories(this IServiceCollection services)
+        internal static IServiceCollection AddDomainRepositories(this IServiceCollection services)
             => services
                 .Scan(scan => scan
                     .FromCallingAssembly()
@@ -55,7 +55,7 @@
                     .AsImplementedInterfaces()
                     .WithTransientLifetime());
 
-        private static IServiceCollection AddQueryRepositories(this IServiceCollection services)
+        internal static IServiceCollection AddQueryRepositories(this IServiceCollection services)
             => services
                 .Scan(scan => scan
                     .FromCallingAssembly()

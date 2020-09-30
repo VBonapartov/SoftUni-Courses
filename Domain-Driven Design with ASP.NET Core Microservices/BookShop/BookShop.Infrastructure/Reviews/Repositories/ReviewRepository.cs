@@ -19,7 +19,7 @@
     {
         private readonly IMapper mapper;
 
-        public ReviewRepository(BookShopDbContext db, IMapper mapper)
+        public ReviewRepository(IReviewsDbContext db, IMapper mapper)
             : base(db)
             => this.mapper = mapper;
 

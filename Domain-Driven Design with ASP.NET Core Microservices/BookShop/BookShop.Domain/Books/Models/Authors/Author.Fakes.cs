@@ -1,16 +1,37 @@
 ﻿namespace BookShop.Domain.Books.Models.Authors
 {
-    using System;
-    using FakeItEasy;
-    using Models.Authors;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Bogus;
+    using Common.Models;
 
-    public class AuthorDummyFactory : IDummyFactory
+    using static Books.BookFakes.Data;
+
+    public class AuthorFakes
     {
-        public bool CanCreate(Type type) => type == typeof(Author);
+        public static class Data
+        {
+            public static IEnumerable<Author> GetAuthors(int count = 10)
+                => Enumerable
+                    .Range(1, count)
+                    .Select(GetAuthor)
+                    .ToList();
 
-        public object? Create(Type type)
-            => new Author("Author");
+            public static Author GetAuthor(int id = 1, int totalBooks = 10)
+            {
+                var author = new Faker<Author>()
+                    .CustomInstantiator(f => new Author(
+                        $"Author{id}"))
+                    .Generate()
+                    .SetId(id);
 
-        public Priority Priority => Priority.Default;
+                foreach (var book in GetBooks().Take(totalBooks))
+                {
+                    author.AddBook(book);
+                }
+
+                return author;
+            }
+        }
     }
 }
