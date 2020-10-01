@@ -26,8 +26,7 @@
             IConfiguration configuration)
             => services
                 .AddDatabase(configuration)
-                .AddDomainRepositories()
-                .AddQueryRepositories()
+                .AddRepositories()
                 .AddIdentity(configuration)
                 .AddTransient<IEventDispatcher, EventDispatcher>();
 
@@ -46,20 +45,12 @@
                 .AddScoped<IStatisticsDbContext>(provider => provider.GetService<BookShopDbContext>())
                 .AddTransient<IInitializer, DatabaseInitializer>();
 
-        internal static IServiceCollection AddDomainRepositories(this IServiceCollection services)
+        internal static IServiceCollection AddRepositories(this IServiceCollection services)
             => services
                 .Scan(scan => scan
                     .FromCallingAssembly()
                     .AddClasses(classes => classes
-                        .AssignableTo(typeof(IDomainRepository<>)))
-                    .AsImplementedInterfaces()
-                    .WithTransientLifetime());
-
-        internal static IServiceCollection AddQueryRepositories(this IServiceCollection services)
-            => services
-                .Scan(scan => scan
-                    .FromCallingAssembly()
-                    .AddClasses(classes => classes
+                        .AssignableTo(typeof(IDomainRepository<>))
                         .AssignableTo(typeof(IQueryRepository<>)))
                     .AsImplementedInterfaces()
                     .WithTransientLifetime());

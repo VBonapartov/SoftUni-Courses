@@ -6,5 +6,7 @@
     public interface IAuthorFactory : IFactory<Author>
     {
         IAuthorFactory WithName(string name);
+
+        IAuthorFactory FromUser(string userId);
     }
 }

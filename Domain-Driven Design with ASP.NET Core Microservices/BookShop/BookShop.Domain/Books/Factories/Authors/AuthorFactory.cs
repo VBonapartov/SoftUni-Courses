@@ -6,10 +6,17 @@
     internal class AuthorFactory : IAuthorFactory
     {
         private string name = default!;
+        private string authorUserId = default!;
 
         public IAuthorFactory WithName(string name)
         { 
             this.name = name;
+            return this;
+        }
+
+        public IAuthorFactory FromUser(string userId)
+        {
+            this.authorUserId = userId;
             return this;
         }
 
@@ -20,7 +27,7 @@
                 throw new InvalidAuthorException("Author name must have a value.");
             }
 
-            return new Author(this.name);
+            return new Author(this.name, this.authorUserId);
         }
     }
 }

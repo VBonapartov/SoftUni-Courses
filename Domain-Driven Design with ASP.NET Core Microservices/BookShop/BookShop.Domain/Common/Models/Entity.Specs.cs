@@ -10,8 +10,8 @@
         public void EntitiesWithEqualIdsShouldBeEqual()
         {
             // Arrange
-            var first = new Author("First").SetId(1);
-            var second = new Author("Second").SetId(1);
+            var first = new Author("First", "TestUserId").SetId(1);
+            var second = new Author("Second", "TestUserId").SetId(1);
 
             // Act
             var result = first == second;
@@ -24,8 +24,8 @@
         public void EntitiesWithDifferentIdsShouldNotBeEqual()
         {
             // Arrange
-            var first = new Author("First").SetId(1);
-            var second = new Author("Second").SetId(2);
+            var first = new Author("First", "TestUserId").SetId(1);
+            var second = new Author("Second", "TestUserId").SetId(2);
 
             // Act
             var result = first == second;

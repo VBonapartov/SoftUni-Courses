@@ -2,7 +2,7 @@
 {
     using System;
     using System.Linq.Expressions;
-    using BookShop.Domain.Common;
+    using Domain.Common;
     using Models.Books;
 
     public class BookOnlyAvailableSpecification : Specification<Book>

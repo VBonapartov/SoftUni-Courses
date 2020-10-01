@@ -21,7 +21,8 @@
             {
                 var author = new Faker<Author>()
                     .CustomInstantiator(f => new Author(
-                        $"Author{id}"))
+                        $"Author{id}",
+                        "TestUserId"))
                     .Generate()
                     .SetId(id);
 

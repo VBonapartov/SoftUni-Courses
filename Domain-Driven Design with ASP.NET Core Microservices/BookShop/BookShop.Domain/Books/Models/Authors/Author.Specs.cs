@@ -13,7 +13,7 @@
         public void ValidAuthorShouldNotThrowException()
         {
             // Act
-            Action act = () => new Author("Valid name");
+            Action act = () => new Author("Valid name", "TestUserId");
 
             // Assert
             act.Should().NotThrow<InvalidAuthorException>();
@@ -23,7 +23,7 @@
         public void InvalidNameShouldThrowException()
         {
             // Act
-            Action act = () => new Author("");
+            Action act = () => new Author("", "TestUserId");
 
             // Assert
             act.Should().Throw<InvalidAuthorException>();
@@ -33,7 +33,7 @@
         public void AddBookShouldSaveBook()
         {
             // Arrange
-            var author = new Author("Valid author");
+            var author = new Author("Valid author", "TestUserId");
             var book = A.Dummy<Book>();
 
             // Act

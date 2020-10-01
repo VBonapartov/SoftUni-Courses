@@ -12,7 +12,6 @@
     using Domain.Books.Exceptions;
     using Domain.Books.Models.Authors;
     using Domain.Books.Repositories;
-    using Identity;
     using Infrastructure.Common.Persistence;
     using Microsoft.EntityFrameworkCore;
 
@@ -27,12 +26,12 @@
         public Task<Author> FindByUser(
             string userId,
             CancellationToken cancellationToken = default)
-            => this.FindByUser(userId, user => user.Author!, cancellationToken);
+            => this.FindByUser(userId, author => author, cancellationToken);
 
         public Task<int> GetAuthorId(
             string userId,
             CancellationToken cancellationToken = default)
-            => this.FindByUser(userId, user => user.Author!.Id, cancellationToken);
+            => this.FindByUser(userId, author => author.Id, cancellationToken);
 
         public async Task<bool> HasBook(int authorId, int bookId, CancellationToken cancellationToken = default)
             => await this
@@ -57,13 +56,12 @@
 
         private async Task<T> FindByUser<T>(
             string userId,
-            Expression<Func<User, T>> selector,
+            Expression<Func<Author, T>> selector,
             CancellationToken cancellationToken = default)
         {
             var authorData = await this
-                .Data
-                .Users
-                .Where(u => u.Id == userId)
+                .All()
+                .Where(a => a.UserId == userId)
                 .Select(selector)
                 .FirstOrDefaultAsync(cancellationToken);
 

@@ -3,8 +3,8 @@
     using System.Collections.Generic;
     using System.Linq;
     using Books;
-    using Domain.Books.Events.Books;    
     using Common;
+    using Domain.Books.Events.Books;
     using Domain.Common.Models;
     using Exceptions;
     
@@ -14,10 +14,11 @@
     {
         private readonly HashSet<Book> books;
 
-        internal Author(string name)
+        internal Author(string name, string userId)
         {
             this.Validate(name);
 
+            this.UserId = userId;
             this.Name = name;
             this.books = new HashSet<Book>();
         }
@@ -28,6 +29,8 @@
         //    this.Name = name;
         //    this.books = new HashSet<Book>();
         //}
+
+        public string UserId { get; private set; }
 
         public string Name { get; private set; }
 
