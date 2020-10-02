@@ -43,8 +43,8 @@
                 //    : this.bookFactory.WithAuthor(author);
 
                 var review = this.reviewFactory
-                    .WithAuthor(this.currentUser.UserId)
-                    .WithBook(request.BookId)
+                    .ForBook(request.BookId)
+                    .WithAuthor(this.currentUser.UserId)                    
                     .WithTitle(request.Title)
                     .WithDescription(request.Description)
                     .Build();

@@ -4,20 +4,20 @@
 
     internal class ReviewFactory : IReviewFactory
     {
-        private string userId = default!;
         private int bookId = default!;
+        private string userId = default!;       
         private string reviewTitle = default!;
         private string reviewDescription = default!;
+
+        public IReviewFactory ForBook(int bookId)
+        {
+            this.bookId = bookId;
+            return this;
+        }
 
         public IReviewFactory WithAuthor(string userId)
         {
             this.userId = userId;
-            return this;
-        }
-
-        public IReviewFactory WithBook(int bookId)
-        {
-            this.bookId = bookId;
             return this;
         }
 
@@ -37,8 +37,8 @@
 
         public Review Build(string userId, int bookId, string title, string description)
             => this
+                .ForBook(bookId)
                 .WithAuthor(userId)
-                .WithBook(bookId)
                 .WithTitle(title)
                 .WithDescription(description)
                 .Build();

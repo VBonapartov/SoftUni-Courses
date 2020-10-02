@@ -9,13 +9,13 @@
     public class StatisticsController : ApiController
     {
         [HttpGet]
-        [Route(Id)]
+        [Route(nameof(Current))]
         public async Task<ActionResult<GetCurrentStatisticsOutputModel>> Current(
             [FromRoute] GetCurrentStatisticsQuery query)
             => await this.Send(query);
 
-        [HttpPut]
-        [Route(Id)]
+        [HttpGet]
+        [Route(nameof(BookViews))]
         public async Task<ActionResult<int>> BookViews(
              [FromRoute] GetBookViewsQuery query)
              => await this.Send(query);       

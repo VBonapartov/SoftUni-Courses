@@ -4,11 +4,11 @@
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-    using BookShop.Domain.Books.Models.Authors;
-    using BookShop.Domain.Books.Models.Books;    
-    using BookShop.Domain.Books.Specifications.Authors;
-    using BookShop.Domain.Books.Specifications.Books;
-    using BookShop.Domain.Common;
+    using Domain.Books.Models.Authors;
+    using Domain.Books.Models.Books;    
+    using Domain.Books.Specifications.Authors;
+    using Domain.Books.Specifications.Books;
+    using Domain.Common;
 
     public abstract class BooksQuery
     {

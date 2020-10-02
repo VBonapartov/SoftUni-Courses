@@ -5,9 +5,9 @@
 
     public interface IReviewFactory : IFactory<Review>
     {
-        IReviewFactory WithAuthor(string userId);
+        IReviewFactory ForBook(int bookId);
 
-        IReviewFactory WithBook(int bookId);
+        IReviewFactory WithAuthor(string userId);
 
         IReviewFactory WithTitle(string title);
 

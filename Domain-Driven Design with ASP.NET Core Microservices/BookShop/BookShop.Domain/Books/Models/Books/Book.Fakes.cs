@@ -29,12 +29,13 @@
                         .Select(i => GetBook(i, false)))
                     .ToList();
 
-            public static Book GetBook(int id = 1, bool isAvailable = true, int totalReviews = 10)
+            public static Book GetBook(int id = 1, bool isAvailable = true)
             {
                 var book = new Faker<Book>()
                     .CustomInstantiator(f => new Book(
                         f.Lorem.Letter(10),
-                        A.Dummy<Publisher>(),
+                        //A.Dummy<Publisher>(),
+                        new Publisher($"Publisher{id}"),
                         f.Random.Number(100, 200),
                         A.Dummy<Options>(),
                         isAvailable))
